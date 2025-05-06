@@ -1,0 +1,54 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 110px);">
+    <div class="card shadow p-4" style="min-width: 350px;">
+        <h2 class="text-center mb-4">Iniciar Sesión</h2>
+        <form method="post" asp-controller="Cuenta" asp-action="Login">
+            <div class="mb-3">
+                <label for="Email" class="form-label" asp-for="Correo"></label>
+                <input type="email" class="form-control" asp-for="Correo" required>
+                <span asp-validation-for="Correo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="Password" class="form-label" asp-for="Contraseña"></label>
+                <input type="password" class="form-control" asp-for="Contraseña" required>
+                <span asp-validation-for="Contraseña" class="text-danger"></span>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" asp-for="Recuerdame" />
+                <label class="form-check-label mb-2" asp-for="Recuerdame"></label>
+            </div>
+            <hr />
+            <div asp-validation-summary="ModelOnly"></div>
+            <br />
+            <button type="submit" class="btn btn-success w-100">Ingresar</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+                (function() {
+            // Add event listener
+            document.addEventListener("mousemove", parallax);
+            const elem = document.querySelector("#parallax");
+            // Magic happens here
+            function parallax(e) {
+                let _w = window.innerWidth/2;
+                let _h = window.innerHeight/2;
+                let _mouseX = e.clientX;
+                let _mouseY = e.clientY;
+                let _depth1 = `${50 - (_mouseX - _w) * 0.01}% ${50 - (_mouseY - _h) * 0.01}%`;
+                let _depth2 = `${50 - (_mouseX - _w) * 0.02}% ${50 - (_mouseY - _h) * 0.02}%`;
+                let _depth3 = `${50 - (_mouseX - _w) * 0.06}% ${50 - (_mouseY - _h) * 0.06}%`;
+                let x = `${_depth3}, ${_depth2}, ${_depth1}`;
+                console.log(x);
+                elem.style.backgroundPosition = x;
+            }
+
+        })();
+    </script>
+}

@@ -1,0 +1,106 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+:root {
+    --fuenteHeading: 'PT Sans', sans-serif;
+    --fuenteParrafos: 'Open Sans', sans-serif;
+    --primario: #008000;
+    --gris: #e1e1e1;
+    --blanco: #ffffff;
+    --negro: #000000;
+    --porcentaje: 100%;
+}
+
+
+body {
+    font-family: var(--fuenteParrafos);
+    line-height: 2;
+    background-color: #fff;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--fuenteHeading);
+    line-height: 1.2;
+}
+
+img {
+    max-width: 100%;
+}
+
+nav a:hover {
+    color: green !important;
+    /* Puedes quitarlo si no deseas hover verde */
+}
+
+.header_texto p {
+    font-size: large;
+    line-height: 2;
+}
+
+@media (min-width: 768px) {
+    .header_texto {
+        margin-top: 10rem;
+        line-height: normal;
+    }
+}
+
+
+/* Personalización específica del botón modo oscuro (si se sigue usando) */
+.dark-mode-boton,
+.dark-mode-boton:hover {
+    width: 3rem;
+    filter: invert(100%);
+}
+
+    .dark-mode-boton:hover {
+        cursor: pointer;
+    }
+
+h6 {
+    color: #fff;
+}
+
+.contenedor-footer {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer {
+    background-color: var(--negro);
+}
+
+@media (min-width: 768px) {
+    .barra {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding:10px;
+    }
+
+    .navegacion__enlace {
+        display: flex;
+        flex-direction: row;
+    }
+}
+
