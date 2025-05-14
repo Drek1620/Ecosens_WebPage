@@ -1,0 +1,189 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <p class="fw-bold fs-4">DASHBOARD</p>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-3">
+            <div class="cards rounded-3 border-start border-5 border-primary shadow-sm h-100">
+                <div class=" d-flex justify-content-between align-items-center">
+                    <p class="mb-0 fs-5 text-secondary">PET</p>
+                    <span class="material-icons-outlined fs-2 text-primary">recycling</span>
+                </div>
+                <div class=" fw-semibold fs-5 text-secondary fw-bold">249</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cards rounded-3 border-start border-5 border-warning shadow-sm h-100">
+                <div class=" d-flex justify-content-between align-items-center">
+                    <p class="mb-0 fs-5 text-secondary">Metal</p>
+                    <span class="material-icons-outlined fs-2 text-warning">recycling</span>
+                </div>
+                <div class=" fw-semibold fs-5 text-secondary fw-bold">83</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cards rounded-3 border-start border-5 border-success shadow-sm h-100">
+                <div class=" d-flex justify-content-between align-items-center">
+                    <p class="mb-0 fs-5 text-secondary">Total</p>
+                    <span class="material-icons-outlined fs-2 text-success">recycling</span>
+                </div>
+                <div class=" fw-semibold fs-5 text-secondary fw-bold">79</div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="cards rounded-3 border-start border-5 border-danger shadow-sm h-100">
+                <div class=" d-flex justify-content-between align-items-center">
+                    <p class="mb-0 fs-5 text-secondary ">Alertas (hoy)</p>
+                    <span class="material-icons-outlined fs-2 text-danger">notification_important</span>
+                </div>
+                <div class="fw-semibold fs-5 text-secondary fw-bold">56</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row mt-5 g-4">
+        <div class="col-md-6">
+            <div class="card charts-card p-3 shadow-sm">
+                <p class="chart-title text-center">Zonas con mayor recolección de basura</p>
+                <div id="bar-chart" style="min-height: 250px;"></div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card charts-card p-3 shadow-sm">
+                <p class="chart-title text-center">Cantidad de plásticos y metales (Últimos meses)</p>
+                <div id="area-chart" style="min-height: 250px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        let sidebarOpen = false;
+        const sidebar = document.getElementById('sidebar');
+
+        function openSidebar() {
+          if (!sidebarOpen) {
+            sidebar.classList.add('sidebar-responsive');
+            sidebarOpen = true;
+          }
+        }
+
+        function closeSidebar() {
+          if (sidebarOpen) {
+            sidebar.classList.remove('sidebar-responsive');
+            sidebarOpen = false;
+          }
+        }
+
+        // ---------- GRAFICAS ----------
+
+        const barChartOptions = {
+          series: [
+            {
+              data: [10, 8, 6, 4, 2],
+            },
+          ],
+          chart: {
+            type: 'bar',
+            height: 350,
+            toolbar: {
+              show: false,
+            },
+          },
+          colors: ['#246dec', '#cc3c43', '#367952', '#f5b74f', '#4f35a1'],
+          plotOptions: {
+            bar: {
+              distributed: true,
+              borderRadius: 4,
+              horizontal: false,
+              columnWidth: '40%',
+            },
+          },
+          dataLabels: {
+            enabled: false,
+          },
+          legend: {
+            show: false,
+          },
+          xaxis: {
+            categories: ['Zona 1', 'Zona 2', 'Zona 3', 'Zona 4', 'Zona 5'],
+          },
+          yaxis: {
+            title: {
+              text: 'Cantidad',
+            },
+          },
+        };
+
+        const barChart = new ApexCharts(
+          document.querySelector('#bar-chart'),
+          barChartOptions
+        );
+        barChart.render();
+
+        // AREA
+        const areaChartOptions = {
+          series: [
+            {
+              name: 'Plasticos',
+              data: [31, 40, 28, 51, 42, 109, 100],
+            },
+            {
+              name: 'Metales',
+              data: [11, 32, 45, 32, 34, 52, 41],
+            },
+          ],
+          chart: {
+            height: 350,
+            type: 'area',
+            toolbar: {
+              show: false,
+            },
+          },
+          colors: ['#4f35a1', '#246dec'],
+          dataLabels: {
+            enabled: false,
+          },
+          stroke: {
+            curve: 'smooth',
+          },
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+          markers: {
+            size: 0,
+          },
+          yaxis: [
+            {
+              opposite: true,
+              title: {
+                text: 'Cantidad (kg)',
+              },
+            },
+          ],
+          tooltip: {
+            shared: true,
+            intersect: false,
+          },
+        };
+
+        const areaChart = new ApexCharts(
+          document.querySelector('#area-chart'),
+          areaChartOptions
+        );
+        areaChart.render();
+    </script>
+}

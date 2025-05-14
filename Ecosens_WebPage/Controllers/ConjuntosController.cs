@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ecosens_WebPage.Controllers
 {
-    public class DashboardController : Controller
+    public class ConjuntosController : Controller
     {
         [Authorize]
         public IActionResult Index()

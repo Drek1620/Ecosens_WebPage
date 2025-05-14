@@ -1,7 +1,24 @@
+using Ecosens_WebPage.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        // Ruta de inicio de sesión. Si el usuario no está autenticado, se les redirige aquí.
+        options.LoginPath = "/Sesion/Login";
+
+        // Ruta que se redirige cuando el usuario intenta acceder a una página restringida.
+        options.AccessDeniedPath = "/Sesion/AccessDenied";
+
+        // Otras opciones pueden ser configuradas aquí, como la duración del cookie.
+    });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient<LoginService>();
 
 var app = builder.Build();
 

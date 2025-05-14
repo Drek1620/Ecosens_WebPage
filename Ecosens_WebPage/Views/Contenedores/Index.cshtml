@@ -1,0 +1,114 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+}
+
+<div class="container py-5 d-flex flex-column vh-100">
+    <div class="text-center mb-4">
+        <p class="fw-bold fs-4">Sistema de Monitoreo de Contenedores</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 mb-4">
+        <div class="col">
+            <div class="cards rounded-3 border-start border-5 border-primary shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-primary mb-0">PET (kg)</p>
+                    <span class="material-icons-outlined fs-2 text-primary">recycling</span>
+                </div>
+                <span class="fw-bold text-primary fs-5">249</span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="cards rounded-3 border-start border-5 border-warning shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-primary mb-0">Metal (kg)</p>
+                    <span class="material-icons-outlined fs-2 text-warning">recycling</span>
+                </div>
+                <span class="fw-bold text-primary fs-5">83</span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="cards rounded-3 border-start border-5 border-success shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-primary mb-0">Total (kg)</p>
+                    <span class="material-icons-outlined fs-2 text-success">recycling</span>
+                </div>
+                <span class="fw-bold text-primary fs-5">790</span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="cards rounded-3 border-start border-5 border-danger shadow-sm h-100">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="text-primary mb-0">Alertas (hoy)</p>
+                    <span class="material-icons-outlined fs-2 text-danger">notification_important</span>
+                </div>
+                <span class="fw-bold text-primary fs-5">56</span>
+            </div>
+        </div>
+    </div>
+    <div class="container my-4 p-4 bg-white rounded shadow flex-grow-1 align-content-center">
+        <div class="trash-display my-4">
+            <div class="trash-container">
+                <div class="lid"></div>
+                <div class="rectangle">
+                    <div class="lines">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+            <div class="trash-container">
+                <div class="lid"></div>
+                <div class="rectangle">
+                    <div class="lines">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <button class="btn btn-primary" onclick="setFillLevel(0)">Vacío</button>
+            <button class="btn btn-primary" onclick="setFillLevel(50)">Medio</button>
+            <button class="btn btn-primary" onclick="setFillLevel(100)">Lleno</button>
+        </div>
+    </div>
+    <div class="alert warning show" id="warningAlert">
+        ¡Precaución! Los contenedores están a media capacidad
+    </div>
+    <div class="alert danger show" id="dangerAlert">
+        ¡Atención! Los contenedores están llenos
+    </div>
+
+
+</div>
+
+@section Scripts{
+    <script>
+              function setFillLevel(percentage) {
+          const fills = document.querySelectorAll('.fill');
+          fills.forEach(fill => {
+            fill.style.height = percentage + '%';
+          });
+
+          const warningAlert = document.getElementById('warningAlert');
+          const dangerAlert = document.getElementById('dangerAlert');
+
+          // Remove show class from all alerts
+          warningAlert.classList.remove('show');
+          dangerAlert.classList.remove('show');
+
+          // Add show class to appropriate alert based on fill level
+          if (percentage === 50) {
+            warningAlert.classList.add('show');
+          } else if (percentage === 100) {
+            dangerAlert.classList.add('show');
+          }
+        }
+    </script>
+}

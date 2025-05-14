@@ -1,0 +1,100 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+}
+
+<h1 class="text-center text-secondary fw-bold mb-4 display-4 sector-title-heading">
+    Sectores de Nuestra Empresa
+</h1>
+
+<div class="d-flex justify-content-center gap-3 mb-4">
+    <button class="btn d-flex align-items-center action-btn" data-bs-toggle="modal" data-bs-target="#sectorModal">
+        <svg style="width: 20px; height: 20px; fill: white;" viewBox="0 0 24 24">
+            <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+        </svg>
+        Agregar
+    </button>
+
+
+</div>
+
+<div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 px-4">
+        <!-- Repite este bloque por cada sector -->
+        <div class="col">
+            <div class="sector-card">
+                <div class="card-actions">
+                    <button class="card-action-btn edit-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+                        </svg>
+                    </button>
+                    <button class="card-action-btn delete-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                        </svg>
+                    </button>
+                </div>
+                <svg class="sector-icon" viewBox="0 0 24 24">
+                    <path d="M12,3L2,12h3v8h6v-6h2v6h6v-8h3L12,3z M17,18h-2v-6H9v6H7v-7.81l5-4.5l5,4.5V18z" />
+                </svg>
+                <h3 class="sector-title">Sector 1</h3>
+                <p class="sector-description">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+                <button class="btn ver-btn">Ver</button>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="sector-card">
+                <div class="card-actions">
+                    <button class="card-action-btn edit-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+                        </svg>
+                    </button>
+                    <button class="card-action-btn delete-btn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                        </svg>
+                    </button>
+                </div>
+                <svg class="sector-icon" viewBox="0 0 24 24">
+                    <path d="M12,3L2,12h3v8h6v-6h2v6h6v-8h3L12,3z M17,18h-2v-6H9v6H7v-7.81l5-4.5l5,4.5V18z" />
+                </svg>
+                <h3 class="sector-title">Sector 1</h3>
+                <p class="sector-description">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+                <button class="btn ver-btn">Ver</button>
+            </div>
+        </div>
+        <!-- Fin de sector -->
+    </div>
+</div>
+
+
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="sectorModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Agregar Sector</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <form id="sectorForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="sectorName" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="sectorName" name="sectorName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sectorDescription" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="sectorDescription" name="sectorDescription" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

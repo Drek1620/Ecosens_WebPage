@@ -1,0 +1,133 @@
+﻿@using System.Security.Claims
+@{
+    var TipoId =int.Parse(User.FindFirst("TipoId")?.Value);
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Ecosens_WebPage</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site2.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Ecosens_WebPage.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+</head>
+<body>
+    <div class="grid-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                            <use xlink:href="#bootstrap" />
+                        </svg>
+                    </a>
+
+                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                        <!-- Menú opcional -->
+                    </ul>
+
+                    <!-- Notificaciones -->
+                    <div class="dropdown me-3">
+                        <a href="#" class="d-block text-dark position-relative" id="dropdownNotifications" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bell fs-4"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                3
+                                <span class="visually-hidden">nuevas notificaciones</span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownNotifications">
+                            <li><h6 class="dropdown-header">Notificaciones</h6></li>
+                            <li><a class="dropdown-item" href="#">Nueva solicitud recibida</a></li>
+                            <li><a class="dropdown-item" href="#">Área reportó actividad</a></li>
+                            <li><a class="dropdown-item" href="#">Revisión pendiente</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Ver todas</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Usuario -->
+                    <div class="dropdown text-end">
+                        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2">
+                            <strong>@(User.Identity.Name ?? "Usuario")</strong>
+                        </a>
+                        <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="#">New project...</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form asp-controller="Sesion" asp-action="Logout" method="post" class="dropdown-item p-0 m-0">
+                                    <button type="submit" class="btn btn-link dropdown-item">Sign out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <!-- End Header -->
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="sidebar-title">
+                <div class="sidebar-brand">
+                    <span class="material-icons-outlined">inventory</span> EcoSens
+                </div>
+                <span class="material-icons-outlined" onclick="closeSidebar()">close</span>
+            </div>
+
+            <ul class="list-unstyled p-0">
+                <li class="sidebar-list-item @(TipoId != 1 ? "visually-hidden": null)">
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none text-secondary ">
+                        <span class="material-icons-outlined">dashboard</span> Inicio
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a asp-controller="Areas" asp-action="Index" class="text-decoration-none text-secondary">
+                        <span class="material-icons-outlined">fact_check</span> Sectores de recolección
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a asp-controller="Usuarios" asp-action="Index" 
+                    class="text-decoration-none text-secondary @(TipoId != 1 ? "visually-hidden": null)">
+                        <span class="material-icons-outlined">people</span> Personal
+                    </a>
+                </li>
+                <li class="sidebar-list-item">
+                    <a href="#" 
+                    class="text-decoration-none text-secondary @(TipoId != 1 ? "visually-hidden": null)">
+                        <span class="material-icons-outlined">settings</span> Configuración
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <!-- End Sidebar -->
+
+        <main role="main" class="pb-3 main-container">
+            @RenderBody()
+        </main>
+    </div>
+    
+    
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- ApexCharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
