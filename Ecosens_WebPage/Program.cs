@@ -19,6 +19,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<LoginService>();
+builder.Services.AddHttpClient<SesionDataService>();
+builder.Services.AddHttpClient<NotificacionService>();
+builder.Services.AddHttpClient<AreaService>();
+
 
 var app = builder.Build();
 

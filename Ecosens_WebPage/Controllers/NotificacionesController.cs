@@ -1,31 +1,27 @@
 ﻿using Ecosens_WebPage.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Ecosens_WebPage.Models;
+using System.Net.Http;
 
 namespace Ecosens_WebPage.Controllers
 {
-    public class DashboardController : Controller
+    public class NotificacionesController : Controller
     {
+        private readonly NotificacionService notificacionService;
         private readonly SesionDataService sesionDataService;
 
-        public DashboardController(SesionDataService sesionDataService)
+        public NotificacionesController(NotificacionService notificacionService, SesionDataService sesionDataService)
         {
+            this.notificacionService = notificacionService;
             this.sesionDataService = sesionDataService;
         }
-        [Authorize]
         public async Task<IActionResult> Index()
         {
-            
             var userId = User.FindFirst("UserId");
-            var TipoId = User.FindFirst("TipoId");
 
-            if(int.Parse(TipoId.Value) != 1)
-            {
-                return RedirectToAction("Index","Conjuntos");
-            }
+            var ConsultaNotificaciones = await notificacionService.ObtenerNotificaciones(
+                int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
 
             var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
 
@@ -39,7 +35,16 @@ namespace Ecosens_WebPage.Controllers
             ViewData["AreaId"] = ConsultaDatosSesion.AreaId;
             ViewData["Foto"] = ConsultaDatosSesion.Foto == "" ? null : ConsultaDatosSesion.Foto;
             ViewData["Notificacion"] = ConsultaDatosSesion.Notificaciones;
-            return View();
+
+            return View(ConsultaNotificaciones);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MarcarLeido(int id)
+        {
+            var ConsultaNotificaciones = await notificacionService.MarcarLeido(
+                id, Request.Cookies["AuthToken"].ToString());
+            return ConsultaNotificaciones ? Ok() : StatusCode(500);
         }
     }
 }

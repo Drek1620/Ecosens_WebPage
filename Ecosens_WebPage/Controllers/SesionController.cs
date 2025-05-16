@@ -10,10 +10,12 @@ namespace Ecosens_WebPage.Controllers
     public class SesionController : Controller
     {
         private readonly LoginService loginService;
+        private readonly SesionDataService sesionDataService;
 
-        public SesionController(LoginService loginService)
+        public SesionController(LoginService loginService, SesionDataService sesionDataService)
         {
             this.loginService = loginService;
+            this.sesionDataService = sesionDataService;
         }
         [HttpGet]
         public IActionResult Login()
@@ -28,31 +30,35 @@ namespace Ecosens_WebPage.Controllers
             {
                 return View(model);
             }
-            var (IsSuccess, Token,UserId,TipoId,Nombre, ErrorMessage) = await loginService.ObtenerToken(model.Correo, model.Contraseña);
+            var ConsultaToken = await loginService.ObtenerToken(model.Correo, model.Contraseña);
 
-            if (!IsSuccess || string.IsNullOrEmpty(Token))
+            if (!ConsultaToken.IsSuccess || string.IsNullOrEmpty(ConsultaToken.Token))
             {
                 ModelState.AddModelError("", "Correo o contraseña incorrectos.");
                 return View(model); // Regresa al formulario de login con el mensaje de error
             }
 
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, Nombre),
-                new Claim("UserId", UserId.ToString()),
-                new Claim("TipoId", TipoId.ToString())
+                new Claim("UserId", ConsultaToken.UserId.ToString()),
+                new Claim("TipoId", ConsultaToken.TipoId.ToString())
             };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            Response.Cookies.Append("AuthToken", Token, new CookieOptions
+            Response.Cookies.Append("AuthToken", ConsultaToken.Token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true, // Solo se enviará en conexiones seguras
                 SameSite = SameSiteMode.Strict, // Ayuda a prevenir CSRF
                 Expires = DateTime.UtcNow.AddHours(1) // Establece la expiración
             });
+
+            
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 

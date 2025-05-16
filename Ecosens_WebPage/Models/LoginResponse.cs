@@ -10,7 +10,5 @@ namespace Ecosens_WebPage.Models
         public int UserId { get; set; }
         [JsonPropertyName("tipo_id")]
         public int TipoId { get; set; }
-        [JsonPropertyName("nombre")]
-        public string Nombre { get; set; }
     }
 }

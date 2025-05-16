@@ -16,7 +16,7 @@ namespace Ecosens_WebPage.Services
         }
 
 
-        public async Task<(bool IsSuccess, string Token,int UserId,int TipoId,string Nombre, string ErrorMessage)> ObtenerToken(string correo, string password)
+        public async Task<(bool IsSuccess, string Token,int UserId,int TipoId, string ErrorMessage)> ObtenerToken(string correo, string password)
         {
             var url = $"{_apiBaseUrl}/api/auth/login";
 
@@ -37,13 +37,13 @@ namespace Ecosens_WebPage.Services
 
                 if(!string.IsNullOrEmpty(responseData.Token))
                 {
-                    return (true, responseData.Token,responseData.UserId,responseData.TipoId,responseData.Nombre,null);
+                    return (true, responseData.Token,responseData.UserId,responseData.TipoId,null);
                 }
 
-                return (false, null,0,0,null, "Usuario o contraseña incorrectos.");
+                return (false, null, 0, 0, "Usuario o contraseña incorrectos.");
             }
 
-            return (false, null,0, 0, null, $"Error al autenticar. Codigo de estado: {response.StatusCode}");
+            return (false, null,0, 0, $"Error al autenticar. Codigo de estado: {response.StatusCode}");
         }
     }
 }

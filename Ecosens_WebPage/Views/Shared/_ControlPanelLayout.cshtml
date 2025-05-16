@@ -1,7 +1,6 @@
 ﻿@using System.Security.Claims
 @{
-    var TipoId =int.Parse(User.FindFirst("TipoId")?.Value);
-
+    var TipoId = int.Parse(User.FindFirst("TipoId")?.Value);
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +42,7 @@
                         <a href="#" class="d-block text-dark position-relative" id="dropdownNotifications" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-bell fs-4"></i>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                3
+                                @(ViewData["Notificacion"] ?? 0)
                                 <span class="visually-hidden">nuevas notificaciones</span>
                             </span>
                         </a>
@@ -53,15 +52,15 @@
                             <li><a class="dropdown-item" href="#">Área reportó actividad</a></li>
                             <li><a class="dropdown-item" href="#">Revisión pendiente</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Ver todas</a></li>
+                            <li><a class="dropdown-item" asp-controller="Notificaciones" asp-action="Index">Ver todas</a></li>
                         </ul>
                     </div>
 
                     <!-- Usuario -->
                     <div class="dropdown text-end">
                         <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle me-2">
-                            <strong>@(User.Identity.Name ?? "Usuario")</strong>
+                            <img src="@(ViewData["Foto"] as string ?? "https://github.com/mdo.png")" alt="mdo" width="32" height="32" class="rounded-circle me-2">
+                            <strong>@(ViewData["NombreUsuario"] as string ?? "Invitado")</strong>
                         </a>
                         <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                             <li><a class="dropdown-item" href="#">New project...</a></li>

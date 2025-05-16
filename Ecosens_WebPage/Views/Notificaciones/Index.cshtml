@@ -1,0 +1,82 @@
+﻿@model List<NotificacionesResponse>
+@{
+
+    Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+    ViewData["Title"] = "Notificaciones";
+}
+
+<div class="container mt-4">
+    <h2>Notificaciones</h2>
+    <ul class="nav nav-pills mb-3" id="notificaciones-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="nuevas-tab" data-bs-toggle="pill" data-bs-target="#nuevas" type="button" role="tab">Nuevas</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="todas-tab" data-bs-toggle="pill" data-bs-target="#todas" type="button" role="tab">Todas</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="notificaciones-tabContent">
+        <!-- NUEVAS -->
+        <div class="tab-pane fade show active" id="nuevas" role="tabpanel" aria-labelledby="nuevas-tab">
+            <ul class="list-group">
+                @foreach (var notif in Model.Where(n => !n.Leido))
+                {
+                    <li class="list-group-item list-group-item-warning" onclick="marcarComoLeido(@notif.Id)" style="cursor:pointer;">
+                        <div class="d-flex justify-content-between">
+                            <span>@notif.Mensaje</span>
+                            <small>@notif.Fecha.ToString("dd/MM/yyyy HH:mm")</small>
+                        </div>
+                    </li>
+                }
+                @if (!Model.Any(n => !n.Leido))
+                {
+                    <li class="list-group-item text-muted">Sin nuevas notificaciones</li>
+                }
+            </ul>
+        </div>
+
+        <!-- TODAS -->
+        <div class="tab-pane fade" id="todas" role="tabpanel" aria-labelledby="todas-tab">
+            <ul class="list-group">
+                @foreach (var notif in Model)
+                {
+                    var styleClass = notif.Leido ? "list-group-item-light" : "list-group-item-warning";
+                    <li class="list-group-item @styleClass" onclick="marcarComoLeido(@notif.Id)" style="cursor:pointer;">
+                        <div class="d-flex justify-content-between">
+                            <span>@notif.Mensaje</span>
+                            <small>@notif.Fecha.ToString("dd/MM/yyyy HH:mm")</small>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        function marcarComoLeido(id) {
+            fetch(`/Notificaciones/MarcarLeido/${id}`, {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    location.reload();
+                }
+            });
+        }
+
+        function filtrar(tipo) {
+            const filas = document.querySelectorAll("#tablaNotificaciones tbody tr");
+            filas.forEach(fila => {
+                const esLeido = !fila.classList.contains("table-info");
+                if (tipo === 'nuevas' && esLeido) {
+                    fila.style.display = 'none';
+                } else {
+                    fila.style.display = '';
+                }
+            });
+        }
+    </script>
+}
