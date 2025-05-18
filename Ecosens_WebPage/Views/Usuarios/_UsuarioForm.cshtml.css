@@ -1,0 +1,40 @@
+﻿
+
+/* Modal personalizado */
+.modal-custom {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content-custom {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+}
+
+/* Botones personalizados si no se quiere usar clases de Bootstrap */
+.btn-edit {
+    background-color: #ffc107;
+    color: #000;
+}
+
+    .btn-edit:hover {
+        background-color: #e0a800;
+    }
+
+.btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
