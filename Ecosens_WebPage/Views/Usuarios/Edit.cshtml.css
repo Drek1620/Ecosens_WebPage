@@ -21,13 +21,18 @@
 }
 
 /* Botones personalizados si no se quiere usar clases de Bootstrap */
+.btn-edit {
+    background-color: #ffc107;
+    color: #000;
+}
+
+    .btn-edit:hover {
+        background-color: #e0a800;
+    }
 
 .btn-delete {
-    border: none; /* elimina el borde por defecto */
-    outline: none;
     background-color: #dc3545;
     color: #fff;
-    transition: background-color 0.2s ease; /* <<< transición igual */
 }
 
     .btn-delete:hover {
@@ -35,63 +40,62 @@
     }
 
 
-.modal-toggle {
+
+/* Modal azul para edición */
+.edit-modal-toggle {
     display: none;
 }
 
-.modal-backdrop {
+.edit-modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 50, 100, 0.75); /* semitransparente azul oscuro */
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 1000;
 }
 
-.modal-toggle:checked ~ .modal-backdrop {
+.edit-modal-toggle:checked ~ .edit-modal-backdrop {
     display: flex;
 }
 
-.modal-content {
-    background: #fff;
+.edit-modal-content {
+    background: #e6f2ff; /* azul muy claro */
     padding: 1.5rem;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
+    border: 2px solid #3399ff; /* borde azul */
 }
 
-.btn-open-modal {
-    display: inline-block;
+.btn-open-edit-modal {
+    display: inline‑block;
     padding: 0.5rem 1rem;
-    background: #28a745;
+    background: #0066cc;
     color: #fff;
     cursor: pointer;
     border-radius: 4px;
     text-decoration: none;
 }
 
-.btn-cancel, .btn-save {
+.btn-cancel-edit, .btn-save-edit {
     padding: 0.5rem 1rem;
     margin-left: 0.5rem;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.btn-cancel {
-    background: #6c757d;
+.btn-cancel-edit {
+    background: #004080;
     color: #fff;
 }
 
-.btn-save {
-    background: #28a745;
+.btn-save-edit {
+    background: #0099ff;
     color: #fff;
     border: none;
-}
-
-.mb-3 {
-    margin-bottom: 1rem;
 }

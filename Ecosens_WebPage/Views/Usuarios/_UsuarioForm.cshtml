@@ -1,0 +1,55 @@
+﻿@model Ecosens_WebPage.Models.UsuarioViewModel
+
+<form asp-action="Create" asp-controller="Usuarios" method="post">
+
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label">Nombre</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Apellido" class="form-label">Apellido</label>
+        <input asp-for="Apellido" class="form-control" />
+        <span asp-validation-for="Apellido" class="text-danger"></span>
+    </div>
+
+        <div class="mb-3">
+        <label asp-for="Correo" class="form-label">Correo</label>
+        <input asp-for="Correo" class="form-control" />
+        <span asp-validation-for="Correo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Contrasena" class="form-label">Contrasena</label>
+        <input asp-for="Contrasena" class="form-control" />
+        <span asp-validation-for="Contrasena" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="Telefono" class="form-label">Telefono</label>
+        <input asp-for="Telefono" class="form-control" />
+        <span asp-validation-for="Telefono" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="TipoId" class="form-label">Tipo de Empleado</label>
+        <input asp-for="TipoId" class="form-control" />
+        <span asp-validation-for="TipoId" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="AreaId" class="form-label">Area</label>
+        <input asp-for="AreaId" class="form-control" />
+        <span asp-validation-for="AreaId" class="text-danger"></span>
+    </div>
+
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+        <label for="modal-toggle" class="btn-cancel">Cancelar</label>
+        <button type="submit" class="btn-save">Guardar</button>
+    </div>
+</form>

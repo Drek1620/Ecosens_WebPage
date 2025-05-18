@@ -1,11 +1,32 @@
-﻿@{
+﻿@model IEnumerable<Ecosens_WebPage.Models.UsuarioViewModel>
+@{
     Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
 }
 
 <div class="container my-4 p-4 bg-white rounded shadow">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <input type="text" class="form-control w-50" placeholder="Buscar empleado...">
-        <button class="btn btn-success" onclick="showAddModal()">+ Agregar Empleado</button>
+        <form asp-action="Index" method="get" class="d-flex w-50">
+            <input type="text"
+                   name="searchTerm"
+                   value="@(ViewData["SearchTerm"] as string)"
+                   class="form-control me-2"
+                   placeholder="Buscar empleado..." />
+            <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+        </form>
+
+
+
+
+        <input type="checkbox" id="modal-toggle" class="modal-toggle" />
+
+        <label for="modal-toggle" class="btn-open-modal">+ Agregar Empleado</label>
+
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <h2>Agregar Empleado</h2>
+                @await Html.PartialAsync("_UsuarioForm", new Ecosens_WebPage.Models.UsuarioViewModel())
+            </div>
+        </div>
     </div>
 
     <table class="table table-bordered table-hover">
@@ -13,47 +34,57 @@
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Cargo</th>
-                <th>Departamento</th>
-                <th>Email</th>
-                <th>Acciones</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Telefono</th>
+                <th>Tipo de Empleado</th>
+                <th>Area</th>
+
+
+
+
+
+
             </tr>
         </thead>
         <tbody>
+            @foreach (var usuario in Model)
+            {
+                <tr>
+                    <td>@usuario.Id</td>
+                    <td>@usuario.Nombre</td>
+                    <td>@usuario.Apellido</td>
+                    <td>@usuario.Correo</td>
+                    <td>@usuario.Telefono</td>
+                    <td>@usuario.Tipoempleado</td>
+                    <td>@usuario.Area</td>
+                    
+           
+
+
+                    <td>
+                        <a asp-controller="Usuarios"
+                           asp-action="Edit"
+                           asp-route-id="@usuario.Id"
+                           class="btn btn-primary btn-sm">
+                            Editar
+                        </a>
+                    </td>
+
+
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@usuario.Id" method="get" class="d-inline">
+                            <button type="submit" class="btn-delete btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+
+
+                </tr>
+            }
             
         </tbody>
     </table>
 </div>
 
-<!-- Modal para agregar/editar empleado -->
-<div id="employeeModal" class="modal-custom">
-    <div class="modal-content-custom">
-        <h2 id="modalTitle">Agregar Empleado</h2>
-        <form id="employeeForm">
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre:</label>
-                <input type="text" id="name" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="position" class="form-label">Cargo:</label>
-                <input type="text" id="position" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="department" class="form-label">Departamento:</label>
-                <input type="text" id="department" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" id="email" class="form-control" required>
-            </div>
-            <div class="d-flex justify-content-end gap-2 mt-4">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-                <button type="submit" class="btn btn-success">Guardar</button>
-            </div>
-        </form>
-    </div>
-</div>
 
-@section Scripts{
-    <script src="~/js/site_usuarios.js"></script>
-}
+
