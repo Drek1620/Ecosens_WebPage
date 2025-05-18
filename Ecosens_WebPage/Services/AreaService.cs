@@ -47,5 +47,48 @@ namespace Ecosens_WebPage.Services
 
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<AreaResponse> ObtenerAreaPorId(int Id, string Token)
+        {
+            var url = $"{_baseUrl}/api/Area/{Id}";
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+            var response = await httpClient.GetAsync(url);
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            var responseData = JsonSerializer.Deserialize<AreaResponse>(responseString);
+
+            return responseData;
+        }
+
+        public async Task<bool> EditarArea(AreaResponse model, string Token)
+        {
+            var url = $"{_baseUrl}/api/Area/{model.Id}";
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            var body = new
+            {
+                nombre = model.Nombre,
+                descripcion = model.Descripcion
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PutAsync(url, content);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> EliminarAreaPorId(int Id, string Token)
+        {
+            var url = $"{_baseUrl}/api/Area/{Id}";
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+            var response = await httpClient.DeleteAsync(url);
+
+            return response.IsSuccessStatusCode;
+        }
     }
 }

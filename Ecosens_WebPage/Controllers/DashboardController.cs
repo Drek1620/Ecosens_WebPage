@@ -10,10 +10,12 @@ namespace Ecosens_WebPage.Controllers
     public class DashboardController : Controller
     {
         private readonly SesionDataService sesionDataService;
+        private readonly DashboardService dashboardService;
 
-        public DashboardController(SesionDataService sesionDataService)
+        public DashboardController(SesionDataService sesionDataService, DashboardService dashboardService)
         {
             this.sesionDataService = sesionDataService;
+            this.dashboardService = dashboardService;
         }
         [Authorize]
         public async Task<IActionResult> Index()
@@ -35,11 +37,22 @@ namespace Ecosens_WebPage.Controllers
                 return RedirectToAction("Login", "Sesion"); // Redirige al login 
             }
 
+            var Datos = await dashboardService.ObtenerDatos(Request.Cookies["AuthToken"].ToString());
+
+            var NotificacionesHoy = await dashboardService.NotificacionesHoy(Request.Cookies["AuthToken"].ToString());
+
+            var model = new DashboardViewModel
+            {
+                Plastico = Datos.Plastico,
+                Metal = Datos.Metal,
+                TotalAlertas = NotificacionesHoy.Total_alertas
+            };
+
             ViewData["NombreUsuario"] = ConsultaDatosSesion.Nombre;
             ViewData["AreaId"] = ConsultaDatosSesion.AreaId;
             ViewData["Foto"] = ConsultaDatosSesion.Foto == "" ? null : ConsultaDatosSesion.Foto;
             ViewData["Notificacion"] = ConsultaDatosSesion.Notificaciones;
-            return View();
+            return View(model);
         }
     }
 }

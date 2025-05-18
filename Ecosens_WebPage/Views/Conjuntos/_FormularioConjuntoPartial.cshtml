@@ -1,0 +1,76 @@
+﻿@model Conjuntos
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title" id="modalLabel">Nuevo Conjunto y Contenedores</h5>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<form asp-action="Crear" asp-controller="Conjuntos" method="post">
+    <div class="modal-body">
+
+        <!-- Datos del conjunto -->
+        <div class="row g-3">
+            <h6 class="mb-2">Datos del Conjunto</h6>
+            <div class="col-md-6">
+                <label class="form-label">MAC ESP32</label>
+                <input name="Mac_ESP32" class="form-control" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Clave Secreta</label>
+                <input name="Clavesecreta" class="form-control" required />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Área</label>
+                <select name="Area_id" class="form-select" required>
+                    <option value="@Model.AreaId">@Model.Area</option>
+                </select>
+            </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <!-- Datos de los dos contenedores -->
+        <div class="row g-4">
+            <h6 class="mb-2">Contenedor 1 (Plástico)</h6>
+            <div class="col-md-4">
+                <label class="form-label">Dimensiones</label>
+                <input name="Contenedores[0].Dimensiones" class="form-control" type="number" step="0.01" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Peso Total</label>
+                <input name="Contenedores[0].Peso_Total" class="form-control" type="number" step="0.01" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Tipo</label>
+                <select name="Contenedores[0].Tipocont_id" class="form-select" required>
+                    <option value="1">Plástico</option>
+                </select>
+            </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <div class="row g-4">
+            <h6 class="mb-2">Contenedor 2 (Metal)</h6>
+            <div class="col-md-4">
+                <label class="form-label">Dimensiones</label>
+                <input name="Contenedores[1].Dimensiones" class="form-control" type="number" step="0.01" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Peso Total</label>
+                <input name="Contenedores[1].Peso_Total" class="form-control" type="number" step="0.01" required />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Tipo</label>
+                <select name="Contenedores[1].Tipocont_id" class="form-select" required>
+                    <option value="2">Metal</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>

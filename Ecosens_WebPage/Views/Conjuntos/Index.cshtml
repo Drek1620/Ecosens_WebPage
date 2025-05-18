@@ -1,112 +1,82 @@
-﻿
+﻿@model ConjuntosResponse
 @{
     Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+
+    string Estado(string estado){
+        if (estado == "Lleno")
+            return "width: 100%;";
+        if (estado == "Parcialmente Lleno")
+            return "width: 75%;";
+        if (estado == "Medio")
+            return "width: 50%;";
+        if (estado == "Parcialmente Vacio")
+            return "width: 25%;";
+        if (estado == "Parcialmente Vacio")
+            return "width: 25%;";
+        else
+            return "width: 0%;";
+
+    }
+
 }
 
-<h1 class="text-center text-primary mb-4">Panel de Control - Sistemas de Recolección</h1>
+<h1 class="text-center text-primary mb-4">@Model.Area - Sistemas de Recolección</h1>
 
 <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
     <input type="text" class="form-control w-100 w-md-50" placeholder="Buscar sistemas...">
-    <button class="btn btn-success">+ Agregar Sistema</button>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregarConjunto">+ Agregar Sistema</button>
 </div>
 
 <div class="row g-4">
     <!-- Card Sistema 1 -->
-    <div class="col-md-4">
-        <div class="card shadow h-100">
-            <div class="card-body position-relative">
-                <div class="btn-group position-absolute top-0 end-0 m-2">
-                    <button class="btn btn-sm btn-warning">✎</button>
-                    <button class="btn btn-sm btn-danger">✕</button>
-                </div>
-                <h5 class="card-title border-bottom pb-2 text-primary">Sistema 1</h5>
-                <div class="d-flex justify-content-between mb-3">
-                    <div class="text-center flex-fill">
-                        <div class="stat-value">1</div>
-                        <div class="stat-label">Numero</div>
+    @foreach (var item in Model.Conjuntos)
+    {
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body position-relative">
+                    <div class="btn-group position-absolute top-0 end-0 m-2">
+                        <button class="btn btn-sm btn-warning">✎</button>
+                        <button class="btn btn-sm btn-danger">✕</button>
                     </div>
-                    <div class="text-center flex-fill">
-                        <div class="stat-value">192.168.1.11</div>
-                        <div class="stat-label">IP Servidor</div>
+                    <h5 class="card-title border-bottom pb-2 text-primary">Sistema @item.Id</h5>
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="text-center flex-fill">
+                            <div class="stat-value">@item.Id</div>
+                            <div class="stat-label">Numero</div>
+                        </div>
+                        <div class="text-center flex-fill">
+                            <div class="stat-value">@item.Mac_ESP32</div>
+                            <div class="stat-label">Mac ESP32</div>
+                        </div>
                     </div>
+                    <p class="mb-1">Contenedor Plásticos</p>
+                    <div class="progress mb-3">
+                        @{
+                            var EstadoPlastico = Estado(item.Contenedor_plastico);
+                        }
+                        <div class="progress-bar" style="@EstadoPlastico"></div>
+                    </div>
+                    <p class="mb-1">Contenedor Metales</p>
+                    <div class="progress mb-3">
+                        @{
+                            var EstadoMental = Estado(item.Contenedor_metal);
+                        }
+                        <div class="progress-bar" style="@EstadoMental background-color: orange;"></div>
+                    </div>
+                    <div class="alert alert-warning p-2 small">Contenedor Metales: @item.Contenedor_metal</div>
+                    <button class="btn btn-primary w-100">Ver Detalles</button>
                 </div>
-                <p class="mb-1">Contenedor Plásticos</p>
-                <div class="progress mb-3">
-                    <div class="progress-bar" style="width: 75%;"></div>
-                </div>
-                <p class="mb-1">Contenedor Metales</p>
-                <div class="progress mb-3">
-                    <div class="progress-bar" style="width: 50%; background-color: orange;"></div>
-                </div>
-                <div class="alert alert-warning p-2 small">Contenedor Metales: Casi lleno</div>
-                <button class="btn btn-primary w-100">Ver Detalles</button>
             </div>
         </div>
-    </div>
+    }
+    
+</div>
 
-    <!-- Card Sistema 2 -->
-    <div class="col-md-4">
-        <div class="card shadow h-100">
-            <div class="card-body position-relative">
-                <div class="btn-group position-absolute top-0 end-0 m-2">
-                    <button class="btn btn-sm btn-warning">✎</button>
-                    <button class="btn btn-sm btn-danger">✕</button>
-                </div>
-                <h5 class="card-title border-bottom pb-2 text-primary">Sistema 2</h5>
-                <div class="d-flex justify-content-between mb-3">
-                    <div class="text-center flex-fill">
-                        <div class="stat-value">2</div>
-                        <div class="stat-label">Numero</div>
-                    </div>
-                    <div class="text-center flex-fill">
-                        <div class="stat-value">192.168.1.13</div>
-                        <div class="stat-label">IP Servidor</div>
-                    </div>
-                </div>
-                <p class="mb-1">Contenedor Plásticos</p>
-                <div class="progress mb-3">
-                    <div class="progress-bar" style="width: 75%;"></div>
-                </div>
-                <p class="mb-1">Contenedor Metales</p>
-                <div class="progress mb-3">
-                    <div class="progress-bar" style="width: 100%; background-color: orange;"></div>
-                </div>
-                <div class="alert alert-danger p-2 small">Contenedores llenos</div>
-                <button class="btn btn-primary w-100">Ver Detalles</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card Sistema 3 -->
-    <div class="col-md-4">
-        <div class="card shadow h-100">
-            <div class="card-body position-relative">
-                <div class="btn-group position-absolute top-0 end-0 m-2">
-                    <button class="btn btn-sm btn-warning">✎</button>
-                    <button class="btn btn-sm btn-danger">✕</button>
-                </div>
-                <h5 class="card-title border-bottom pb-2 text-primary">Sistema 3</h5>
-                <div class="d-flex justify-content-between mb-3">
-                    <div class="text-center flex-fill">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Numero</div>
-                    </div>
-                    <div class="text-center flex-fill">
-                        <div class="stat-value">192.168.2.13</div>
-                        <div class="stat-label">IP Servidor</div>
-                    </div>
-                </div>
-                <p class="mb-1">Contenedor Plásticos</p>
-                <div class="progress mb-3">
-                    <div class="progress-bar" style="width: 25%;"></div>
-                </div>
-                <p class="mb-1">Contenedor Metales</p>
-                <div class="progress mb-3">
-                    <div class="progress-bar" style="width: 50%; background-color: orange;"></div>
-                </div>
-                <div class="alert alert-warning p-2 small">Contenedor Plásticos: Casi lleno</div>
-                <button class="btn btn-primary w-100">Ver Detalles</button>
-            </div>
+<!-- Modal -->
+<div class="modal fade" id="modalAgregarConjunto" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content shadow-lg border-0">
+            <partial name="_FormularioConjuntoPartial" model="new Conjuntos{Area=Model.Area,AreaId=Model.AreaId}" />
         </div>
     </div>
 </div>

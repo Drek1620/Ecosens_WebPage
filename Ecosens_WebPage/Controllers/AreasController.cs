@@ -58,5 +58,41 @@ namespace Ecosens_WebPage.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
+        {
+
+            var model = await areaService.ObtenerAreaPorId(id, Request.Cookies["AuthToken"].ToString());
+
+            if (model == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return PartialView("_FormularioEditarAreaPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Editar(AreaResponse model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Podrías recargar la vista con errores o redirigir manteniendo los datos
+                return PartialView("_FormularioAreaPartial", model);
+            }
+            await areaService.EditarArea(model, Request.Cookies["AuthToken"].ToString());
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Eliminar(int Id)
+        {
+            
+            await areaService.EliminarAreaPorId(Id, Request.Cookies["AuthToken"].ToString());
+
+            return RedirectToAction("Index");
+        }
     }
 }

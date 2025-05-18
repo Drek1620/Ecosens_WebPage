@@ -1,4 +1,4 @@
-﻿
+﻿@model DashboardViewModel
 @{
     Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
 }
@@ -16,7 +16,7 @@
                     <p class="mb-0 fs-5 text-secondary">PET</p>
                     <span class="material-icons-outlined fs-2 text-primary">recycling</span>
                 </div>
-                <div class=" fw-semibold fs-5 text-secondary fw-bold">249</div>
+                <div class=" fw-semibold fs-5 text-secondary fw-bold">@Model.Plastico</div>
             </div>
         </div>
 
@@ -26,7 +26,7 @@
                     <p class="mb-0 fs-5 text-secondary">Metal</p>
                     <span class="material-icons-outlined fs-2 text-warning">recycling</span>
                 </div>
-                <div class=" fw-semibold fs-5 text-secondary fw-bold">83</div>
+                <div class=" fw-semibold fs-5 text-secondary fw-bold">@Model.Metal</div>
             </div>
         </div>
 
@@ -36,7 +36,7 @@
                     <p class="mb-0 fs-5 text-secondary">Total</p>
                     <span class="material-icons-outlined fs-2 text-success">recycling</span>
                 </div>
-                <div class=" fw-semibold fs-5 text-secondary fw-bold">79</div>
+                <div class=" fw-semibold fs-5 text-secondary fw-bold">@Model.Total</div>
             </div>
         </div>
 
@@ -46,7 +46,7 @@
                     <p class="mb-0 fs-5 text-secondary ">Alertas (hoy)</p>
                     <span class="material-icons-outlined fs-2 text-danger">notification_important</span>
                 </div>
-                <div class="fw-semibold fs-5 text-secondary fw-bold">56</div>
+                <div class="fw-semibold fs-5 text-secondary fw-bold">@Model.TotalAlertas</div>
             </div>
         </div>
 
@@ -92,18 +92,12 @@
 
         // ---------- GRAFICAS ----------
 
-        const barChartOptions = {
-          series: [
-            {
-              data: [10, 8, 6, 4, 2],
-            },
-          ],
+         const barChartOptions = {
+          series: [{ data: [] }],
           chart: {
             type: 'bar',
             height: 350,
-            toolbar: {
-              show: false,
-            },
+            toolbar: { show: false }
           },
           colors: ['#246dec', '#cc3c43', '#367952', '#f5b74f', '#4f35a1'],
           plotOptions: {
@@ -114,76 +108,75 @@
               columnWidth: '40%',
             },
           },
-          dataLabels: {
-            enabled: false,
-          },
-          legend: {
-            show: false,
-          },
+          dataLabels: { enabled: false },
+          legend: { show: false },
           xaxis: {
-            categories: ['Zona 1', 'Zona 2', 'Zona 3', 'Zona 4', 'Zona 5'],
+            categories: [] // ← esto se llenará dinámicamente
           },
           yaxis: {
-            title: {
-              text: 'Cantidad',
-            },
-          },
+            title: { text: 'Cantidad' }
+          }
         };
 
-        const barChart = new ApexCharts(
-          document.querySelector('#bar-chart'),
-          barChartOptions
-        );
-        barChart.render();
+         fetch('https://ecosensapi20250513230303.azurewebsites.net/api/Registros/peso-total-por-area')
+        .then(res => res.json())
+        .then(data => {
+          console.log('Datos JSON:', data);
+          barChartOptions.series[0].data = data.data;
+          barChartOptions.xaxis.categories = data.categories;
+
+          const barChart = new ApexCharts(
+            document.querySelector('#bar-chart'),
+            barChartOptions
+          );
+          barChart.render();
+        })
+        .catch(error => {
+          console.error('Error al cargar la gráfica de barras:', error);
+        });
 
         // AREA
+
         const areaChartOptions = {
-          series: [
-            {
-              name: 'Plasticos',
-              data: [31, 40, 28, 51, 42, 109, 100],
-            },
-            {
-              name: 'Metales',
-              data: [11, 32, 45, 32, 34, 52, 41],
-            },
-          ],
+          series: [],
           chart: {
-            height: 350,
             type: 'area',
-            toolbar: {
-              show: false,
-            },
+            height: 350,
+            toolbar: { show: false }
           },
           colors: ['#4f35a1', '#246dec'],
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            curve: 'smooth',
-          },
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-          markers: {
-            size: 0,
-          },
-          yaxis: [
-            {
-              opposite: true,
-              title: {
-                text: 'Cantidad (kg)',
-              },
-            },
-          ],
+          dataLabels: { enabled: false },
+          stroke: { curve: 'smooth' },
+          labels: [],
+          markers: { size: 0 },
+          yaxis: [{
+            opposite: true,
+            title: { text: 'Cantidad (kg)' }
+          }],
           tooltip: {
             shared: true,
-            intersect: false,
-          },
+            intersect: false
+          }
         };
 
+        fetch('https://ecosensapi20250513230303.azurewebsites.net/api/Registros/estadisticas/pesos-mensuales') // Ajusta si la ruta es distinta
+        .then(response => response.json())
+        .then(data => {
+          areaChartOptions.series = data.series;
+          areaChartOptions.labels = data.labels;
+
+          const areaChart = new ApexCharts(
+            document.querySelector('#area-chart'),
+            areaChartOptions
+          );
+          areaChart.render();
+        })
+        .catch(error => {
+          console.error('Error al cargar datos para el gráfico:', error);
+        });
         const areaChart = new ApexCharts(
           document.querySelector('#area-chart'),
           areaChartOptions
         );
-        areaChart.render();
     </script>
 }

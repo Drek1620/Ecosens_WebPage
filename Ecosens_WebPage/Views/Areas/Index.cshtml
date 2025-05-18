@@ -23,13 +23,15 @@
             <div class="col">
                 <div class="sector-card h-100">
                     <div class="card-actions">
-                        <input type="hidden" value="@item.Id" />
-                        <button class="card-action-btn edit-btn">
+                        <button class="card-action-btn edit-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editModal"
+                                data-id="@item.Id">
                             <svg viewBox="0 0 24 24">
                                 <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
                             </svg>
                         </button>
-                        <button class="card-action-btn delete-btn">
+                        <button class="card-action-btn delete-btn" data-id="@item.Id">
                             <svg viewBox="0 0 24 24">
                                 <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
                             </svg>
@@ -40,7 +42,7 @@
                     </svg>
                     <h3 class="sector-title">@item.Nombre</h3>
                     <p class="sector-description">@item.Descripcion</p>
-                    <button class="btn ver-btn">Ver</button>
+                    <a class="btn ver-btn bg-primary text-white" asp-action="Index" asp-controller="Conjuntos" asp-route-id="@item.Id">Ver</a>
                 </div>
             </div>
         }
@@ -56,7 +58,58 @@
     </div>
 </div>
 
+<!-- Modal de edición (contenido se carga dinámicamente) -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="editModalContent">
+            <partial name="_FormularioEditarAreaPartial" model="new AreaResponse()" />
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="/Areas/Eliminar">
+                <div class="modal-header">
+                    <h5 class="modal-title">¿Eliminar Área?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Estás seguro de que quieres eliminar esta área?
+                    <input type="hidden" name="id" id="deleteAreaId" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+        <script>
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', async () => {
+                const id = button.getAttribute('data-id');
+                const response = await fetch(`/Areas/Editar/${id}`);
+                const html = await response.text();
+                document.getElementById('editModalContent').innerHTML = html;
+            });
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.getAttribute('data-id');
+                document.getElementById('deleteAreaId').value = id;
+                const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                modal.show();
+            });
+        });
+    </script>
+
 }
 

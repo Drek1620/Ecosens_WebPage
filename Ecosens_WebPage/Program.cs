@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -22,6 +25,8 @@ builder.Services.AddHttpClient<LoginService>();
 builder.Services.AddHttpClient<SesionDataService>();
 builder.Services.AddHttpClient<NotificacionService>();
 builder.Services.AddHttpClient<AreaService>();
+builder.Services.AddHttpClient<ConjuntoService>();
+builder.Services.AddHttpClient<DashboardService>();
 
 
 var app = builder.Build();
@@ -38,6 +43,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 
 app.UseAuthorization();
 
