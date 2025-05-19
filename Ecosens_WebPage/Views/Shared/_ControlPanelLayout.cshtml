@@ -63,13 +63,12 @@
                             <strong>@(ViewData["NombreUsuario"] as string ?? "Invitado")</strong>
                         </a>
                         <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                            <li><a class="dropdown-item" href="#">New project...</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Configuraciones</a></li>
+                            <li><a class="dropdown-item" href="#">Perfil</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form asp-controller="Sesion" asp-action="Logout" method="post" class="dropdown-item p-0 m-0">
-                                    <button type="submit" class="btn btn-link dropdown-item">Sign out</button>
+                                    <button type="submit" class="btn btn-link dropdown-item">Cerrar sesión</button>
                                 </form>
                             </li>
                         </ul>

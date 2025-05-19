@@ -1,10 +1,13 @@
 ﻿using Ecosens_WebPage.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Ecosens_WebPage.Services;
 
 namespace Ecosens_WebPage.Controllers
 {
@@ -13,18 +16,18 @@ namespace Ecosens_WebPage.Controllers
 
         Uri baseAddress = new Uri("https://ecosensapi20250513230303.azurewebsites.net/api/");
         private readonly HttpClient _client;
+        private readonly SesionDataService sesionDataService;
 
-
-        public UsuariosController()
+        public UsuariosController(SesionDataService sesionDataService)
         {
 
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
-
+            this.sesionDataService = sesionDataService;
         }
 
         [HttpGet]
-        public IActionResult Index(string searchTerm = null)
+        public async Task<IActionResult> Index(string searchTerm = null)
         {
             // 1. Trae la lista de la API
             var response = _client.GetAsync("Empleados/usuario").Result;
@@ -55,6 +58,19 @@ namespace Ecosens_WebPage.Controllers
 
             // 3. Pasa el valor al ViewData para rellenar el input
             ViewData["SearchTerm"] = searchTerm;
+            var userId = User.FindFirst("UserId");
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
+
+            if (!ConsultaDatosSesion.IsSuccess)
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return RedirectToAction("Login", "Sesion"); // Redirige al login 
+            }
+
+            ViewData["NombreUsuario"] = ConsultaDatosSesion.Nombre;
+            ViewData["AreaId"] = ConsultaDatosSesion.AreaId;
+            ViewData["Foto"] = ConsultaDatosSesion.Foto == "" ? null : ConsultaDatosSesion.Foto;
+            ViewData["Notificacion"] = ConsultaDatosSesion.Notificaciones;
 
             return View(list);
         }
@@ -97,7 +113,6 @@ namespace Ecosens_WebPage.Controllers
 
 
         [HttpGet]
-
         public IActionResult Edit(int id)
         {
 
@@ -126,7 +141,6 @@ namespace Ecosens_WebPage.Controllers
         }
 
         [HttpPost]
-
         public IActionResult Edit(UsuarioViewModel model)
         {
             try

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Ecosens_WebPage.Models;
 
 namespace Ecosens_WebPage.Controllers
 {
@@ -42,6 +43,20 @@ namespace Ecosens_WebPage.Controllers
             ViewData["Notificacion"] = ConsultaDatosSesion.Notificaciones;
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Crear(ConjuntoConContenedoresDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Podrías recargar la vista con errores o redirigir manteniendo los datos
+                return PartialView("_FormularioAreaPartial", model);
+            }
+
+            await conjuntoService.CrearConjunto(model, Request.Cookies["AuthToken"].ToString());
+
+            return RedirectToAction("Index", new {id=model.Area_id});
         }
     }
 }
