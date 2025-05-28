@@ -1,6 +1,6 @@
 ﻿@model Ecosens_WebPage.Models.UsuarioViewModel
 
-<form asp-action="Create" asp-controller="Usuarios" method="post">
+<form asp-action="Create" asp-controller="Usuarios" enctype="multipart/form-data" : method="post">
 
     <div class="mb-3">
         <label asp-for="Nombre" class="form-label">Nombre</label>
@@ -45,6 +45,13 @@
         <label asp-for="AreaId" class="form-label">Area</label>
         <input asp-for="AreaId" class="form-control" />
         <span asp-validation-for="AreaId" class="text-danger"></span>
+    </div>
+
+
+    <div class="mb-3">
+        <label asp-for="archivoFoto" class="control-label">Foto de perfil</label>
+        <input asp-for="archivoFoto" type="file" class="form-control" />
+        <span asp-validation-for="archivoFoto" class="text-danger"></span>
     </div>
 
 

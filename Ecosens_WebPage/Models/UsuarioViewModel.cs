@@ -5,7 +5,7 @@ namespace Ecosens_WebPage.Models
 {
     public class UsuarioViewModel
     {
-        [JsonPropertyName ("id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
         // Usuario
 
@@ -39,7 +39,10 @@ namespace Ecosens_WebPage.Models
         [JsonPropertyName("foto")]
         public string Foto { get; set; }
 
-        [JsonPropertyName ("area")]
+        [JsonIgnore]
+        public IFormFile archivoFoto { get; set; }
+
+        [JsonPropertyName("area")]
         public string Area { get; set; }
 
 

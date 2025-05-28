@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Ecosens_WebPage.Services;
+using Ecosens_WebPage.Helpers;
 
 namespace Ecosens_WebPage.Controllers
 {
@@ -17,13 +18,15 @@ namespace Ecosens_WebPage.Controllers
         Uri baseAddress = new Uri("https://ecosensapi20250513230303.azurewebsites.net/api/");
         private readonly HttpClient _client;
         private readonly SesionDataService sesionDataService;
+        private readonly IConfiguration _config;
 
-        public UsuariosController(SesionDataService sesionDataService)
+        public UsuariosController(SesionDataService sesionDataService, IConfiguration config)
         {
 
             _client = new HttpClient();
             _client.BaseAddress = baseAddress;
             this.sesionDataService = sesionDataService;
+            _config = config;
         }
 
         [HttpGet]
@@ -84,91 +87,108 @@ namespace Ecosens_WebPage.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(UsuarioViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(UsuarioViewModel model)
         {
             try
             {
+                var storageConfig = new AzureStorageConfig
+                {
+                    Cuenta = _config["AzureStorage:Cuenta"],
+                    Llave = _config["AzureStorage:Llave"],
+                    Contenedor = _config["AzureStorage:Contenedor"]
+                };
+
+                if (model.archivoFoto != null && model.archivoFoto.Length > 0)
+                {
+                    var nombreArchivo = $"{Guid.NewGuid()}{Path.GetExtension(model.archivoFoto.FileName)}";
+                    model.Foto = await StorageHelpers.SubirArchivo(
+                        model.archivoFoto.OpenReadStream(),
+                        nombreArchivo,
+                        storageConfig
+                    );
+                }
+
                 string datos = JsonSerializer.Serialize(model);
-                StringContent contenido = new StringContent(datos, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = _client.PostAsync(_client.BaseAddress + "Empleados", contenido).Result;
+                StringContent contenido = new(datos, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _client.PostAsync(_client.BaseAddress + "Empleados", contenido);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["datoChido"] = "se agrego el empleado correctamente.";
+                    TempData["datoChido"] = "Empleado creado exitosamente";
                     return RedirectToAction("Index");
-
                 }
             }
             catch (Exception ex)
             {
-                TempData["error"] = "no se pudo crear el empleado";
-                return RedirectToAction("Index");
-
+                TempData["error"] = $"Error creando empleado: {ex.Message}";
             }
 
             return RedirectToAction("Index");
         }
-
 
 
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            var response = await _client.GetAsync($"Empleados/{id}");
 
-            try
+            if (response.IsSuccessStatusCode)
             {
-                UsuarioViewModel datos = new UsuarioViewModel();
-                HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "Empleados/" + id).Result;
-
-                if (response.IsSuccessStatusCode)
-                {
-
-                    string data = response.Content.ReadAsStringAsync().Result;
-                    datos = JsonSerializer.Deserialize<UsuarioViewModel>(data);
-                }
-
-                return View(datos);
-
-            }
-            catch (Exception ex)
-            {
-                TempData["error"] = "no se pudo crear el empleado";
-                return RedirectToAction("Index");
-
+                var contenido = await response.Content.ReadAsStringAsync();
+                var modelo = JsonSerializer.Deserialize<UsuarioViewModel>(contenido);
+                return View(modelo);
             }
 
+            TempData["error"] = "Empleado no encontrado";
+            return RedirectToAction("Index");
         }
 
+
+
         [HttpPost]
-        public IActionResult Edit(UsuarioViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UsuarioViewModel model)
         {
             try
             {
+                var storageConfig = new AzureStorageConfig
+                {
+                    Cuenta = _config["AzureStorage:Cuenta"],
+                    Llave = _config["AzureStorage:Llave"],
+                    Contenedor = _config["AzureStorage:Contenedor"]
+                };
+
+                if (model.archivoFoto != null && model.archivoFoto.Length > 0)
+                {
+                    var nombreArchivo = $"{Guid.NewGuid()}{Path.GetExtension(model.archivoFoto.FileName)}";
+                    model.Foto = await StorageHelpers.SubirArchivo(
+                        model.archivoFoto.OpenReadStream(),
+                        nombreArchivo,
+                        storageConfig
+                    );
+                }
+
                 string datos = JsonSerializer.Serialize(model);
-                StringContent contenido = new StringContent(datos, Encoding.UTF8, "application/json");
+                StringContent contenido = new(datos, Encoding.UTF8, "application/json");
                 var url = $"Empleados/{model.Id}";
-                HttpResponseMessage response = _client.PutAsync(_client.BaseAddress + url, contenido).Result;
+
+                HttpResponseMessage response = await _client.PutAsync(_client.BaseAddress + url, contenido);
+
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["datoChido"] = "se agrego el empleado correctamente.";
+                    TempData["datoChido"] = "Empleado actualizado correctamente";
                     return RedirectToAction("Index");
-
                 }
             }
             catch (Exception ex)
             {
-                TempData["error"] = "no se pudo crear el empleado";
-                return RedirectToAction("Index");
-
+                TempData["error"] = $"Error actualizando empleado: {ex.Message}";
             }
 
             return RedirectToAction("Index");
-
-
         }
-
-
 
         [HttpGet]
 
@@ -201,14 +221,14 @@ namespace Ecosens_WebPage.Controllers
 
         [HttpPost]
 
-        public IActionResult Deletecontinuar(int id) 
+        public IActionResult Deletecontinuar(int id)
         {
 
             try
             {
-                HttpResponseMessage response = _client.DeleteAsync(_client.BaseAddress + "Empleados/" +  id).Result;
+                HttpResponseMessage response = _client.DeleteAsync(_client.BaseAddress + "Empleados/" + id).Result;
 
-                if (response.IsSuccessStatusCode) 
+                if (response.IsSuccessStatusCode)
                 {
                     TempData["datoChido"] = "se elimino el empleado correctamente.";
 
