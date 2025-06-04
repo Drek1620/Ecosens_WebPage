@@ -5,9 +5,9 @@ namespace Ecosens_WebPage.Models
     public class DashboardDatosResponse
     {
         [JsonPropertyName("plastico")]
-        public int Plastico { get; set; }
+        public double Plastico { get; set; }
         [JsonPropertyName("metal")]
-        public int Metal { get; set; }
+        public double Metal { get; set; }
 
     }
 }

@@ -27,6 +27,8 @@ builder.Services.AddHttpClient<NotificacionService>();
 builder.Services.AddHttpClient<AreaService>();
 builder.Services.AddHttpClient<ConjuntoService>();
 builder.Services.AddHttpClient<DashboardService>();
+builder.Services.AddHttpClient<ContenedoresService>();
+builder.Services.AddHttpClient<RegistroService>();
 
 
 var app = builder.Build();

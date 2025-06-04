@@ -64,7 +64,7 @@
                         <div class="progress-bar" style="@EstadoMental background-color: orange;"></div>
                     </div>
                     <div class="alert alert-warning p-2 small">Contenedor Metales: @item.Contenedor_metal</div>
-                    <a class="btn btn-primary w-100" asp-action="Index" asp-controller="Contenedores" >Ver Detalles</a>
+                    <a class="btn btn-primary w-100" asp-action="Index" asp-controller="Contenedores" asp-route-id="@item.Id">Ver Detalles</a>
                 </div>
             </div>
         </div>

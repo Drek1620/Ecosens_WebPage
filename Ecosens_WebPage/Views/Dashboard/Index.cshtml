@@ -159,7 +159,7 @@
           }
         };
 
-        fetch('https://ecosensapi20250513230303.azurewebsites.net/api/Registros/estadisticas/pesos-mensuales') // Ajusta si la ruta es distinta
+        fetch('https://localhost:7187/api/Registros/estadisticas/pesos-mensuales') // Ajusta si la ruta es distinta
         .then(response => response.json())
         .then(data => {
           areaChartOptions.series = data.series;

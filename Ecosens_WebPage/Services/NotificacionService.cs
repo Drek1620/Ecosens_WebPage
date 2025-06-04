@@ -31,6 +31,22 @@ namespace Ecosens_WebPage.Services
             return responseData;
         }
 
+        public async Task<NotificacionHoyResponse> ObtenerNotificacionesPorConjunto(int Id, string Token)
+        {
+            var url = $"{_apiBaseUrl}/api/Notificaciones/notificaciones/hoy/conjunto/{Id}";
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            var response = await httpClient.GetAsync(url);
+
+            response.EnsureSuccessStatusCode();
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            var responseData = JsonSerializer.Deserialize<NotificacionHoyResponse>(responseString);
+
+            return responseData;
+        }
+
         public async Task<bool> MarcarLeido(int Id, string Token)
         {
             var url = $"{_apiBaseUrl}/api/Notificaciones/{Id}/leido";

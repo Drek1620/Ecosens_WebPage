@@ -24,10 +24,7 @@ namespace Ecosens_WebPage.Controllers
             var userId = User.FindFirst("UserId");
             var TipoId = User.FindFirst("TipoId");
 
-            if(int.Parse(TipoId.Value) != 1)
-            {
-                return RedirectToAction("Index","Conjuntos");
-            }
+            
 
             var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
 
@@ -52,6 +49,11 @@ namespace Ecosens_WebPage.Controllers
             ViewData["AreaId"] = ConsultaDatosSesion.AreaId;
             ViewData["Foto"] = ConsultaDatosSesion.Foto == "" ? null : ConsultaDatosSesion.Foto;
             ViewData["Notificacion"] = ConsultaDatosSesion.Notificaciones;
+
+            if (int.Parse(TipoId.Value) != 1)
+            {
+                return RedirectToAction("Index", "Conjuntos", new { Id = ConsultaDatosSesion.AreaId });
+            }
             return View(model);
         }
     }

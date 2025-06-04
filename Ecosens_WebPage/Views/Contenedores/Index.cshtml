@@ -1,13 +1,29 @@
-﻿
+﻿@model ContenedoresViewModel
 @{
     Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+
+    string Estado(string estado)
+    {
+        if (estado == "Lleno")
+            return "height: 100%;";
+        if (estado == "Parcialmente Lleno")
+            return "height: 75%;";
+        if (estado == "Medio")
+            return "height: 50%;";
+        if (estado == "Parcialmente Vacio")
+            return "height: 25%;";
+        if (estado == "Parcialmente Vacio")
+            return "height: 25%;";
+        else
+            return "height: 0%;";
+
+    }
 }
 
 <div class="container py-5 d-flex flex-column vh-100">
     <div class="text-center mb-4">
         <p class="fw-bold fs-4">Sistema de Monitoreo de Contenedores</p>
     </div>
-
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 mb-4">
         <div class="col">
             <div class="cards rounded-3 border-start border-5 border-primary shadow-sm h-100">
@@ -15,7 +31,7 @@
                     <p class="text-primary mb-0">PET (kg)</p>
                     <span class="material-icons-outlined fs-2 text-primary">recycling</span>
                 </div>
-                <span class="fw-bold text-primary fs-5">249</span>
+                <span class="fw-bold text-primary fs-5">@Model.TotalPlastico</span>
             </div>
         </div>
         <div class="col">
@@ -24,7 +40,7 @@
                     <p class="text-primary mb-0">Metal (kg)</p>
                     <span class="material-icons-outlined fs-2 text-warning">recycling</span>
                 </div>
-                <span class="fw-bold text-primary fs-5">83</span>
+                <span class="fw-bold text-primary fs-5">@Model.TotalMetal</span>
             </div>
         </div>
         <div class="col">
@@ -33,7 +49,7 @@
                     <p class="text-primary mb-0">Total (kg)</p>
                     <span class="material-icons-outlined fs-2 text-success">recycling</span>
                 </div>
-                <span class="fw-bold text-primary fs-5">790</span>
+                <span class="fw-bold text-primary fs-5">@Model.Total</span>
             </div>
         </div>
         <div class="col">
@@ -42,7 +58,7 @@
                     <p class="text-primary mb-0">Alertas (hoy)</p>
                     <span class="material-icons-outlined fs-2 text-danger">notification_important</span>
                 </div>
-                <span class="fw-bold text-primary fs-5">56</span>
+                <span class="fw-bold text-primary fs-5">@Model.TotalNotificaciones</span>
             </div>
         </div>
     </div>
@@ -56,7 +72,7 @@
                         <div class="line"></div>
                         <div class="line"></div>
                     </div>
-                    <div class="fill" style="height:100%;"></div>
+                    <div class="fill" style="@Estado(Model.EstadoPlastico)"></div>
                 </div>
             </div>
             <div class="trash-container">
@@ -67,16 +83,37 @@
                         <div class="line"></div>
                         <div class="line"></div>
                     </div>
-                    <div class="fill" style="height:50%;"></div>
+                    <div class="fill" style="@Estado(Model.EstadoMetal)"></div>
                 </div>
             </div>
         </div>
 
         <div class="d-flex justify-content-center gap-3 mt-4">
-            <button class="btn btn-primary" onclick="setFillLevel(0)">Vaciar contenedor 1</button>
-            <button class="btn btn-primary" onclick="setFillLevel(50)">Vaciar ambos</button>
-            <button class="btn btn-primary" onclick="setFillLevel(100)">Vaciar contenedor 2</button>
+
+            <!-- Vaciar contenedor 1 -->
+            <form asp-action="VaciarContenedor" method="post">
+                <input type="hidden" name="id" value="@Model.IdContenedorPlastico" />
+                <input type="hidden" name="idIndex" value="@Model.ConjuntoId" />
+                <button type="submit" class="btn btn-primary">Vaciar contenedor 1</button>
+            </form>
+
+            <!-- Vaciar ambos -->
+            <form asp-action="VaciarAmbosContenedor" method="post">
+                <input type="hidden" name="id1" value="@Model.IdContenedorPlastico" />
+                <input type="hidden" name="id2" value="@Model.IdContenedorMetal" />
+                <input type="hidden" name="idIndex" value="@Model.ConjuntoId" />
+                <button type="submit" class="btn btn-primary">Vaciar ambos</button>
+            </form>
+
+            <!-- Vaciar contenedor 2 -->
+            <form asp-action="VaciarContenedor" method="post">
+                <input type="hidden" name="id" value="@Model.IdContenedorMetal" />
+                <input type="hidden" name="idIndex" value="@Model.ConjuntoId" />
+                <button type="submit" class="btn btn-primary">Vaciar contenedor 2</button>
+            </form>
+
         </div>
+
     </div>
 
 
