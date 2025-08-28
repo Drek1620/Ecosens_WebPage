@@ -16,7 +16,7 @@ namespace Ecosens_WebPage.Services
             _apiBaseUrl = configuration.GetSection("ApiSettings:BaseUrl").Value;
         }
 
-        public async Task<(bool IsSuccess, string Nombre, int AreaId, string Foto, int Notificaciones, string ErrorMessage)> ObtenerDatosSesion(int UserId, string Token)
+        public async Task<(bool IsSuccess, string Nombre, int? AreaId, string Foto, int Notificaciones, string ErrorMessage)> ObtenerDatosSesion(int UserId, string Token)
         {
             var url = $"{_apiBaseUrl}/api/Empleados/Sesion/{UserId}";
 

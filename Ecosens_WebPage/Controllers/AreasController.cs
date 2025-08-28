@@ -26,10 +26,6 @@ namespace Ecosens_WebPage.Controllers
 
             var ConsultarAreas = await areaService.ObtenerAreas(Request.Cookies["AuthToken"].ToString());
 
-            if (ConsultarAreas.IsNullOrEmpty())
-            {
-                return RedirectToAction("Index", "Dashboard"); 
-            }
 
             var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
 

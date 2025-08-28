@@ -7,7 +7,7 @@ namespace Ecosens_WebPage.Models
         [JsonPropertyName("nombre")]
         public string Nombre { get; set; }
         [JsonPropertyName("areaId")]
-        public int AreaId { get; set; }
+        public int? AreaId { get; set; }
         [JsonPropertyName("foto")]
         public string Foto { get; set; }
         [JsonPropertyName("notificaciones")]
