@@ -19,6 +19,7 @@ namespace Ecosens_WebPage.Controllers
         private readonly HttpClient _client;
         private readonly SesionDataService sesionDataService;
         private readonly IConfiguration _config;
+        private readonly string _token;
 
         public UsuariosController(SesionDataService sesionDataService, IConfiguration config)
         {
@@ -27,6 +28,8 @@ namespace Ecosens_WebPage.Controllers
             _client.BaseAddress = baseAddress;
             this.sesionDataService = sesionDataService;
             _config = config;
+            _token = HttpContext?.User
+            .Claims.FirstOrDefault(c => c.Type == "AuthToken")?.Value;
         }
 
         [HttpGet]
@@ -62,7 +65,7 @@ namespace Ecosens_WebPage.Controllers
             // 3. Pasa el valor al ViewData para rellenar el input
             ViewData["SearchTerm"] = searchTerm;
             var userId = User.FindFirst("UserId");
-            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), _token);
 
             if (!ConsultaDatosSesion.IsSuccess)
             {

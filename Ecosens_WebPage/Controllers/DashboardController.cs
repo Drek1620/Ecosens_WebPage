@@ -28,7 +28,9 @@ namespace Ecosens_WebPage.Controllers
 
             ViewBag.ApiBaseUrl = _apiBaseUrl;
 
-            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
+            var token = User.Claims.FirstOrDefault(c => c.Type == "AuthToken")?.Value;
+
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), token);
 
             if (!ConsultaDatosSesion.IsSuccess)
             {
@@ -36,9 +38,9 @@ namespace Ecosens_WebPage.Controllers
                 return RedirectToAction("Login", "Sesion"); // Redirige al login 
             }
 
-            var Datos = await dashboardService.ObtenerDatos(Request.Cookies["AuthToken"].ToString());
+            var Datos = await dashboardService.ObtenerDatos(token);
 
-            var NotificacionesHoy = await dashboardService.NotificacionesHoy(Request.Cookies["AuthToken"].ToString());
+            var NotificacionesHoy = await dashboardService.NotificacionesHoy(token);
 
             var model = new DashboardViewModel
             {

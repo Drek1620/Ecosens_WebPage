@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Ecosens_WebPage.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Ecosens_WebPage.Controllers
 {
@@ -12,11 +13,14 @@ namespace Ecosens_WebPage.Controllers
     {
         private readonly SesionDataService sesionDataService;
         private readonly AreaService areaService;
+        private readonly string token;
 
         public AreasController(SesionDataService sesionDataService, AreaService areaService)
         {
             this.sesionDataService = sesionDataService;
             this.areaService = areaService;
+            token = HttpContext?.User
+            .Claims.FirstOrDefault(c => c.Type == "AuthToken")?.Value;
         }
         [Authorize]
         public async Task<IActionResult> Index()
@@ -24,10 +28,9 @@ namespace Ecosens_WebPage.Controllers
             var userId = User.FindFirst("UserId");
             var TipoId = User.FindFirst("TipoId"); 
 
-            var ConsultarAreas = await areaService.ObtenerAreas(Request.Cookies["AuthToken"].ToString());
+            var ConsultarAreas = await areaService.ObtenerAreas(token);
 
-
-            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), token);
 
             if (!ConsultaDatosSesion.IsSuccess)
             {
@@ -56,7 +59,7 @@ namespace Ecosens_WebPage.Controllers
                 return PartialView("_FormularioAreaPartial", model);
             }
 
-            await areaService.CrearArea(model, Request.Cookies["AuthToken"].ToString());
+            await areaService.CrearArea(model, token);
 
             return RedirectToAction("Index");
         }
@@ -65,7 +68,7 @@ namespace Ecosens_WebPage.Controllers
         public async Task<IActionResult> Editar(int id)
         {
 
-            var model = await areaService.ObtenerAreaPorId(id, Request.Cookies["AuthToken"].ToString());
+            var model = await areaService.ObtenerAreaPorId(id, token);
 
             if (model == null)
             {
@@ -83,7 +86,7 @@ namespace Ecosens_WebPage.Controllers
                 // Podrías recargar la vista con errores o redirigir manteniendo los datos
                 return PartialView("_FormularioAreaPartial", model);
             }
-            await areaService.EditarArea(model, Request.Cookies["AuthToken"].ToString());
+            await areaService.EditarArea(model, token);
 
             return RedirectToAction("Index");
         }
@@ -92,7 +95,7 @@ namespace Ecosens_WebPage.Controllers
         public async Task<IActionResult> Eliminar(int Id)
         {
             
-            await areaService.EliminarAreaPorId(Id, Request.Cookies["AuthToken"].ToString());
+            await areaService.EliminarAreaPorId(Id, token);
 
             return RedirectToAction("Index");
         }

@@ -42,18 +42,10 @@ namespace Ecosens_WebPage.Controllers
             var claims = new List<Claim>
             {
                 new Claim("UserId", ConsultaToken.UserId.ToString()),
-                new Claim("TipoId", ConsultaToken.TipoId.ToString())
+                new Claim("TipoId", ConsultaToken.TipoId.ToString()),
+                new Claim("AuthToken", ConsultaToken.Token) // Guardar token dentro de los claims si lo necesitas
             };
 
-            Response.Cookies.Append("AuthToken", ConsultaToken.Token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true, // Solo se enviará en conexiones seguras
-                SameSite = SameSiteMode.Strict, // Ayuda a prevenir CSRF
-                Expires = DateTime.UtcNow.AddHours(1) // Establece la expiración
-            });
-
-            
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
