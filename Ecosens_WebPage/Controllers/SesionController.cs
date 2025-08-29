@@ -59,8 +59,16 @@ namespace Ecosens_WebPage.Controllers
             var principal = new ClaimsPrincipal(identity);
 
             
+            await HttpContext.SignInAsync(
+               CookieAuthenticationDefaults.AuthenticationScheme,
+               principal,
+               new AuthenticationProperties
+               {
+                   IsPersistent = model.Recuerdame, // "Recordar sesión"
+                   ExpiresUtc = DateTime.UtcNow.AddHours(1)
+               });
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
 
 
 

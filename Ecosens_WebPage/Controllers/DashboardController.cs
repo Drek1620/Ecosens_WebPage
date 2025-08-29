@@ -11,11 +11,13 @@ namespace Ecosens_WebPage.Controllers
     {
         private readonly SesionDataService sesionDataService;
         private readonly DashboardService dashboardService;
+        private readonly string _apiBaseUrl;
 
-        public DashboardController(SesionDataService sesionDataService, DashboardService dashboardService)
+        public DashboardController(SesionDataService sesionDataService, DashboardService dashboardService, IConfiguration configuration)
         {
             this.sesionDataService = sesionDataService;
             this.dashboardService = dashboardService;
+            _apiBaseUrl = configuration.GetSection("ApiSettings:BaseUrl").Value;
         }
         [Authorize]
         public async Task<IActionResult> Index()
@@ -24,7 +26,7 @@ namespace Ecosens_WebPage.Controllers
             var userId = User.FindFirst("UserId");
             var TipoId = User.FindFirst("TipoId");
 
-            
+            ViewBag.ApiBaseUrl = _apiBaseUrl;
 
             var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
 

@@ -75,6 +75,8 @@
     <script>
         let sidebarOpen = false;
         const sidebar = document.getElementById('sidebar');
+        const apiBaseUrl = '@ViewBag.ApiBaseUrl';
+        console.log(apiBaseUrl);
 
         function openSidebar() {
           if (!sidebarOpen) {
@@ -118,7 +120,7 @@
           }
         };
 
-         fetch('https://localhost:7187/api/Registros/peso-total-por-area')
+         fetch(`${apiBaseUrl}/api/Registros/peso-total-por-area`)
         .then(res => res.json())
         .then(data => {
           console.log('Datos JSON:', data);
@@ -159,7 +161,7 @@
           }
         };
 
-        fetch('https://localhost:7187/api/Registros/estadisticas/pesos-mensuales') // Ajusta si la ruta es distinta
+        fetch(`${apiBaseUrl}/api/Registros/estadisticas/pesos-mensuales`) // Ajusta si la ruta es distinta
         .then(response => response.json())
         .then(data => {
           areaChartOptions.series = data.series;
