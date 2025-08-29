@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,7 +28,12 @@
                         <a asp-action="index" asp-controller="Home" class="text-white text-decoration-none fs-5">Inicio</a>
                         <a href="html/acercade.html" class="text-white text-decoration-none fs-5">Nosotros</a>
                         <a href="html/contacto.html" class="text-white text-decoration-none fs-5">Contacto</a>
-                        <a class="text-white text-decoration-none fs-5" asp-controller="Sesion" asp-action="Login">Iniciar Sesión</a>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated) {
+                            <a class="text-white text-decoration-none fs-5" asp-controller="Dashboard" asp-action="Index">Ingresar</a>
+                        }else{
+                            <a class="text-white text-decoration-none fs-5" asp-controller="Sesion" asp-action="Login">Iniciar Sesión</a>
+                        }
+                        
                     </nav>
                 </div>
 
