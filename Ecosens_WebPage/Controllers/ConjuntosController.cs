@@ -11,25 +11,27 @@ namespace Ecosens_WebPage.Controllers
     {
         private readonly ConjuntoService conjuntoService;
         private readonly SesionDataService sesionDataService;
+        private readonly string _token;
 
         public ConjuntosController(ConjuntoService conjuntoService, SesionDataService sesionDataService)
         {
             this.conjuntoService = conjuntoService;
             this.sesionDataService = sesionDataService;
+            _token = sesionDataService.GetToken();
         }
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> Index(int Id)
         {
             var userId = User.FindFirst("UserId");
-            var model = await conjuntoService.ObtenerConjuntosPorArea(Id, Request.Cookies["AuthToken"].ToString());
+            var model = await conjuntoService.ObtenerConjuntosPorArea(Id, _token);
 
             if(model == null)
             {
                 return RedirectToAction("Index", "Area");
             }
 
-            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), _token);
 
             if (!ConsultaDatosSesion.IsSuccess)
             {
@@ -54,7 +56,7 @@ namespace Ecosens_WebPage.Controllers
                 return PartialView("_FormularioAreaPartial", model);
             }
 
-            await conjuntoService.CrearConjunto(model, Request.Cookies["AuthToken"].ToString());
+            await conjuntoService.CrearConjunto(model, _token);
 
             return RedirectToAction("Index", new {id=model.Area_id});
         }

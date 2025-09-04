@@ -13,6 +13,7 @@ namespace Ecosens_WebPage.Controllers
         private readonly ContenedoresService contenedoresService;
         private readonly NotificacionService notificacionService;
         private readonly RegistroService registroService;
+        private readonly string _token;
 
         public ContenedoresController(SesionDataService sesionDataService, ContenedoresService contenedoresService, NotificacionService notificacionService, RegistroService registroService)
         {
@@ -20,12 +21,13 @@ namespace Ecosens_WebPage.Controllers
             this.contenedoresService = contenedoresService;
             this.notificacionService = notificacionService;
             this.registroService = registroService;
+            _token = sesionDataService.GetToken();
         }
         [Authorize]
         public async Task<IActionResult> Index(int id)
         {
             var userId = User.FindFirst("UserId");
-            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), _token);
 
             if (!ConsultaDatosSesion.IsSuccess)
             {
@@ -33,10 +35,10 @@ namespace Ecosens_WebPage.Controllers
                 return RedirectToAction("Login", "Sesion"); // Redirige al login 
             }
 
-            var ConsultaDatosContenedor = await contenedoresService.ObtenerDatosGenerales(id, Request.Cookies["AuthToken"].ToString());
-            var ConsultaRegistrosPlastico = await contenedoresService.ObtenerDatosRegistrosContenedor(ConsultaDatosContenedor.ContenedorPlastico.Id, Request.Cookies["AuthToken"].ToString());
-            var ConsultaRegistrosMetal = await contenedoresService.ObtenerDatosRegistrosContenedor(ConsultaDatosContenedor.ContenedorMetal.Id, Request.Cookies["AuthToken"].ToString());
-            var ConsultarNotificacionesHoy = await notificacionService.ObtenerNotificacionesPorConjunto(id, Request.Cookies["AuthToken"].ToString());
+            var ConsultaDatosContenedor = await contenedoresService.ObtenerDatosGenerales(id, _token);
+            var ConsultaRegistrosPlastico = await contenedoresService.ObtenerDatosRegistrosContenedor(ConsultaDatosContenedor.ContenedorPlastico.Id, _token);
+            var ConsultaRegistrosMetal = await contenedoresService.ObtenerDatosRegistrosContenedor(ConsultaDatosContenedor.ContenedorMetal.Id, _token);
+            var ConsultarNotificacionesHoy = await notificacionService.ObtenerNotificacionesPorConjunto(id, _token);
 
             var model = new ContenedoresViewModel
             {
@@ -60,15 +62,15 @@ namespace Ecosens_WebPage.Controllers
         [HttpPost]
         public async Task<IActionResult> VaciarContenedor(int id, int idIndex)
         {
-            await registroService.VaciarContenedor(id, Request.Cookies["AuthToken"]?.ToString());
+            await registroService.VaciarContenedor(id, _token);
             return RedirectToAction("Index", new { id = idIndex });
         }
 
         [HttpPost]
         public async Task<IActionResult> VaciarAmbosContenedor(int id1, int id2, int idIndex)
         {
-            await registroService.VaciarContenedor(id1, Request.Cookies["AuthToken"]?.ToString());
-            await registroService.VaciarContenedor(id2, Request.Cookies["AuthToken"]?.ToString());
+            await registroService.VaciarContenedor(id1, _token);
+            await registroService.VaciarContenedor(id2, _token);
             return RedirectToAction("Index", new { id = idIndex });
         }
 

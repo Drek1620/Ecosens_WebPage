@@ -28,8 +28,7 @@ namespace Ecosens_WebPage.Controllers
             _client.BaseAddress = baseAddress;
             this.sesionDataService = sesionDataService;
             _config = config;
-            _token = HttpContext?.User
-            .Claims.FirstOrDefault(c => c.Type == "AuthToken")?.Value;
+            _token = sesionDataService.GetToken();
         }
 
         [HttpGet]

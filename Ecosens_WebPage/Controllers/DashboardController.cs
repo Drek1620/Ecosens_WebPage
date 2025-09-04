@@ -12,12 +12,14 @@ namespace Ecosens_WebPage.Controllers
         private readonly SesionDataService sesionDataService;
         private readonly DashboardService dashboardService;
         private readonly string _apiBaseUrl;
+        private readonly string _token;
 
         public DashboardController(SesionDataService sesionDataService, DashboardService dashboardService, IConfiguration configuration)
         {
             this.sesionDataService = sesionDataService;
             this.dashboardService = dashboardService;
             _apiBaseUrl = configuration.GetSection("ApiSettings:BaseUrl").Value;
+            _token = sesionDataService.GetToken();
         }
         [Authorize]
         public async Task<IActionResult> Index()
@@ -28,9 +30,7 @@ namespace Ecosens_WebPage.Controllers
 
             ViewBag.ApiBaseUrl = _apiBaseUrl;
 
-            var token = User.Claims.FirstOrDefault(c => c.Type == "AuthToken")?.Value;
-
-            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), token);
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), _token);
 
             if (!ConsultaDatosSesion.IsSuccess)
             {
@@ -38,9 +38,9 @@ namespace Ecosens_WebPage.Controllers
                 return RedirectToAction("Login", "Sesion"); // Redirige al login 
             }
 
-            var Datos = await dashboardService.ObtenerDatos(token);
+            var Datos = await dashboardService.ObtenerDatos(_token);
 
-            var NotificacionesHoy = await dashboardService.NotificacionesHoy(token);
+            var NotificacionesHoy = await dashboardService.NotificacionesHoy(_token);
 
             var model = new DashboardViewModel
             {

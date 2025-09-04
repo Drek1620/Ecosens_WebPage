@@ -19,8 +19,7 @@ namespace Ecosens_WebPage.Controllers
         {
             this.sesionDataService = sesionDataService;
             this.areaService = areaService;
-            token = HttpContext?.User
-            .Claims.FirstOrDefault(c => c.Type == "AuthToken")?.Value;
+            token = sesionDataService.GetToken();
         }
         [Authorize]
         public async Task<IActionResult> Index()

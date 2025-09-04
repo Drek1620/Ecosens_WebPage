@@ -9,11 +9,13 @@ namespace Ecosens_WebPage.Services
     {
         private readonly HttpClient httpClient;
         private readonly string _apiBaseUrl;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SesionDataService(HttpClient httpClient, IConfiguration configuration)
+        public SesionDataService(HttpClient httpClient, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             this.httpClient = httpClient;
             _apiBaseUrl = configuration.GetSection("ApiSettings:BaseUrl").Value;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<(bool IsSuccess, string Nombre, int? AreaId, string Foto, int Notificaciones, string ErrorMessage)> ObtenerDatosSesion(int UserId, string Token)
@@ -39,6 +41,12 @@ namespace Ecosens_WebPage.Services
             }
 
             return (false, null, 0, null, 0, $"Error al autenticar. Codigo de estado: {response.StatusCode}");
+        }
+
+        public string GetToken()
+        {
+            return _httpContextAccessor.HttpContext?.User.Claims
+                .FirstOrDefault(c => c.Type == "AuthToken")?.Value;
         }
     }
 }

@@ -29,6 +29,7 @@ builder.Services.AddHttpClient<ConjuntoService>();
 builder.Services.AddHttpClient<DashboardService>();
 builder.Services.AddHttpClient<ContenedoresService>();
 builder.Services.AddHttpClient<RegistroService>();
+builder.Services.AddHttpContextAccessor();
 
 
 var app = builder.Build();

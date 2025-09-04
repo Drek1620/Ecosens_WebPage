@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+    ViewData["Title"] = "Perfil";
+}
+
+<h1>Configuración de perfil</h1>
+<p class="muted">Actualiza tu información personal y preferencias.</p>
+
+<section class="card grid">
+    <form id="profileForm" class="form" autocomplete="off">
+        <div class="field avatar-field">
+            <label class="label">Avatar</label>
+            <div class="avatar-row">
+                <div class="avatar-preview" id="avatarPreview" title="Avatar de usuario">
+                    <span class="initials" id="avatarInitials">U</span>
+                </div>
+                <div class="avatar-controls">
+                    <input id="avatarInput" class="form-control" type="file" accept="image/*" />
+                    <button type="button" id="removeAvatar" class="link-btn">Eliminar</button>
+                    <small class="muted">JPG, PNG — hasta 2MB</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label" for="name">Nombre</label>
+            <input id="name" name="name" class="form-control" type="text" maxlength="50" required placeholder="Nombre" />
+            <div class="hint" id="nameHint"></div>
+        </div>
+
+        <div class="field">
+            <label class="form-label fw-bolder">Apellidos</label>
+            <input autocomplete="off" class="form-control" type="text" maxlength="50" placeholder="Apellidos" />
+        </div>
+
+        <div class="field">
+            <label class="label" for="phone">Teléfono</label>
+            <input class="form-control" id="phone" name="phone" type="tel" maxlength="20" placeholder="+34 600 000 000" />
+        </div>
+
+        <div class="field">
+            <label class="label">Área</label>
+            <div class="muted small" id="areaDisplay">Desarrollo de Producto</div>
+        </div>
+
+        <details class="panel" open>
+            <summary>Seguridad</summary>
+            <div class="panel-inner">
+                <div class="field">
+                    <label class="form-label" >Contraseña actual</label>
+                    <input class="form-control" autocomplete="off" type="password" placeholder="Mínimo 8 caracteres" />
+                </div>
+                <div class="field">
+                    <label class="label" for="newPass">Nueva contraseña</label>
+                    <input class="form-control" id="newPass" name="newPass" type="password" placeholder="Mínimo 8 caracteres" />
+                    <div class="hint" id="passHint"></div>
+                </div>
+            </div>
+        </details>
+
+        <div class="actions">
+            <button type="submit" class="btn btn-primary" id="saveBtn">Guardar cambios</button>
+            <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+        </div>
+    </form>
+
+    <aside class="preview">
+        <div class="preview-card">
+            <div id="liveAvatar" class="preview-avatar"><span id="liveInitials">U</span></div>
+            <h2 id="liveName">Nombre Usuario</h2>
+            <p id="liveEmail" class="muted">correo@ejemplo.com</p>
+            <p class="muted small">Área: <span id="liveArea">Desarrollo de Producto</span></p>
+            <p class="muted small">Tel: <span id="livePhone">—</span></p>
+
+        </div>
+    </aside>
+</section>

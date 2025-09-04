@@ -10,20 +10,22 @@ namespace Ecosens_WebPage.Controllers
     {
         private readonly NotificacionService notificacionService;
         private readonly SesionDataService sesionDataService;
+        private readonly string _token;
 
         public NotificacionesController(NotificacionService notificacionService, SesionDataService sesionDataService)
         {
             this.notificacionService = notificacionService;
             this.sesionDataService = sesionDataService;
+            _token = sesionDataService.GetToken();
         }
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirst("UserId");
 
             var ConsultaNotificaciones = await notificacionService.ObtenerNotificaciones(
-                int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
+                int.Parse(userId.Value), _token);
 
-            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), Request.Cookies["AuthToken"].ToString());
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), _token);
 
             if (!ConsultaDatosSesion.IsSuccess)
             {
@@ -43,7 +45,7 @@ namespace Ecosens_WebPage.Controllers
         public async Task<IActionResult> MarcarLeido(int id)
         {
             var ConsultaNotificaciones = await notificacionService.MarcarLeido(
-                id, Request.Cookies["AuthToken"].ToString());
+                id, _token);
             return ConsultaNotificaciones ? Ok() : StatusCode(500);
         }
     }
