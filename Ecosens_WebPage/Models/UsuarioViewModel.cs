@@ -48,7 +48,7 @@ namespace Ecosens_WebPage.Models
 
         [JsonPropertyName("areaId")]
 
-        public int AreaId { get; set; }
+        public int? AreaId { get; set; }
 
         [JsonPropertyName("tipoId")]
 
