@@ -30,7 +30,7 @@ namespace Ecosens_WebPage.Services
             return responseData;
         }
 
-        public async Task<bool> CrearConjunto(ConjuntoConContenedoresDto model, string Token)
+        public async Task<string> CrearConjunto(ConjuntoConContenedoresDto model, string Token)
         {
             var url = $"{_apiBaseUrl}/api/Conjuntos/conjunto-con-contenedores";
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -39,7 +39,7 @@ namespace Ecosens_WebPage.Services
             {
                 mac_ESP32 = model.Mac_ESP32,
                 clavesecreta = model.Clavesecreta,
-                area_id = model.Area_id,
+                area_Id = model.Area_Id,
                 contenedores = model.Contenedores
             };
 
@@ -47,7 +47,17 @@ namespace Ecosens_WebPage.Services
 
             var response = await httpClient.PostAsync(url, content);
 
-            return response.IsSuccessStatusCode;
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return $"Éxito: {responseContent}";
+            }
+            else
+            {
+                return $"Error: {responseContent}";
+            }
         }
+
     }
 }

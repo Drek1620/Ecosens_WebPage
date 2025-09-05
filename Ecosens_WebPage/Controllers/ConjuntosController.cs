@@ -56,9 +56,11 @@ namespace Ecosens_WebPage.Controllers
                 return PartialView("_FormularioAreaPartial", model);
             }
 
-            await conjuntoService.CrearConjunto(model, _token);
+            var mensaje = await conjuntoService.CrearConjunto(model, _token);
 
-            return RedirectToAction("Index", new {id=model.Area_id});
+            TempData["Mensaje"] = mensaje;
+
+            return RedirectToAction("Index", new {id=model.Area_Id});
         }
     }
 }

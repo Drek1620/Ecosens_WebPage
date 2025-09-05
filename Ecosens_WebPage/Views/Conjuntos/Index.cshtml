@@ -27,6 +27,13 @@
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAgregarConjunto">+ Agregar Sistema</button>
 </div>
 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["Mensaje"]
+    </div>
+}
+
 <div class="row g-4">
     <!-- Card Sistema 1 -->
     @foreach (var item in Model.Conjuntos)

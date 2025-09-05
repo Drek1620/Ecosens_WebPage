@@ -9,9 +9,9 @@ namespace Ecosens_WebPage.Models
         [Required]
         public decimal Dimensiones { get; set; }
         public decimal Peso_Total { get; set; }
-        public string Estado { get; set; }
-        public int Tipocont_id { get; set; }
-        public int Conjunto_id { get; set; }
+        public string Estado { get; set; } = "Vacio";
+        public int Tipocont_Id { get; set; }
+        public int Conjunto_Id { get; set; }
     }
 
     public class ContenedoresResponse
