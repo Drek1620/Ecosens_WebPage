@@ -62,5 +62,18 @@ namespace Ecosens_WebPage.Controllers
 
             return RedirectToAction("Index", new {id=model.Area_Id});
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
+        {
+            var model = await conjuntoService.ObtenerConjuntoPorId(id, _token);
+
+            if (model == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return PartialView("_FormularioEditarConjuntoPartial", model);
+        }
     }
 }

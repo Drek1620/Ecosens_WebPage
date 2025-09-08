@@ -59,5 +59,23 @@ namespace Ecosens_WebPage.Services
             }
         }
 
+        public async Task<ConjuntoConContenedoresDto> ObtenerConjuntoPorId(int id, string token)
+        {
+            var url = $"{_apiBaseUrl}/api/Conjuntos/{id}/conjunto-con-contenedores";
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var content = new StringContent(JsonSerializer.Serialize(id), Encoding.UTF8, "application/json");
+            var response = await httpClient.PostAsync(url, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var responseData = JsonSerializer.Deserialize<ConjuntoConContenedoresDto>(responseContent);
+                return responseData;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }

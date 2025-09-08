@@ -13,13 +13,13 @@ namespace Ecosens_WebPage.Controllers
     {
         private readonly SesionDataService sesionDataService;
         private readonly AreaService areaService;
-        private readonly string token;
+        private readonly string _token;
 
         public AreasController(SesionDataService sesionDataService, AreaService areaService)
         {
             this.sesionDataService = sesionDataService;
             this.areaService = areaService;
-            token = sesionDataService.GetToken();
+            _token = sesionDataService.GetToken();
         }
         [Authorize]
         public async Task<IActionResult> Index()
@@ -27,9 +27,9 @@ namespace Ecosens_WebPage.Controllers
             var userId = User.FindFirst("UserId");
             var TipoId = User.FindFirst("TipoId"); 
 
-            var ConsultarAreas = await areaService.ObtenerAreas(token);
+            var ConsultarAreas = await areaService.ObtenerAreas(_token);
 
-            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), token);
+            var ConsultaDatosSesion = await sesionDataService.ObtenerDatosSesion(int.Parse(userId.Value), _token);
 
             if (!ConsultaDatosSesion.IsSuccess)
             {
@@ -58,7 +58,7 @@ namespace Ecosens_WebPage.Controllers
                 return PartialView("_FormularioAreaPartial", model);
             }
 
-            await areaService.CrearArea(model, token);
+            await areaService.CrearArea(model, _token);
 
             return RedirectToAction("Index");
         }
@@ -67,7 +67,7 @@ namespace Ecosens_WebPage.Controllers
         public async Task<IActionResult> Editar(int id)
         {
 
-            var model = await areaService.ObtenerAreaPorId(id, token);
+            var model = await areaService.ObtenerAreaPorId(id, _token);
 
             if (model == null)
             {
@@ -85,7 +85,7 @@ namespace Ecosens_WebPage.Controllers
                 // Podrías recargar la vista con errores o redirigir manteniendo los datos
                 return PartialView("_FormularioAreaPartial", model);
             }
-            await areaService.EditarArea(model, token);
+            await areaService.EditarArea(model, _token);
 
             return RedirectToAction("Index");
         }
@@ -94,7 +94,7 @@ namespace Ecosens_WebPage.Controllers
         public async Task<IActionResult> Eliminar(int Id)
         {
             
-            await areaService.EliminarAreaPorId(Id, token);
+            await areaService.EliminarAreaPorId(Id, _token);
 
             return RedirectToAction("Index");
         }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model UsuarioViewModel
+@{
     Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
     ViewData["Title"] = "Perfil";
 }
@@ -7,7 +8,7 @@
 <p class="muted">Actualiza tu información personal y preferencias.</p>
 
 <section class="card grid">
-    <form id="profileForm" class="form" autocomplete="off">
+    <form asp-controller="Perfil" asp-action="Editar" id="profileForm" class="form" autocomplete="off">
         <div class="field avatar-field">
             <label class="label">Avatar</label>
             <div class="avatar-row">
@@ -23,24 +24,28 @@
         </div>
 
         <div class="field">
-            <label class="label" for="name">Nombre</label>
-            <input id="name" name="name" class="form-control" type="text" maxlength="50" required placeholder="Nombre" />
+            <label class="label" >Nombre</label>
+            <input id="name" asp-for="Nombre" class="form-control" value="@Model.Nombre" type="text" maxlength="50" required placeholder="Nombre" />
             <div class="hint" id="nameHint"></div>
         </div>
 
         <div class="field">
             <label class="form-label fw-bolder">Apellidos</label>
-            <input autocomplete="off" class="form-control" type="text" maxlength="50" placeholder="Apellidos" />
+            <input autocomplete="off" class="form-control" type="text" value="@Model.Apellido" maxlength="50" placeholder="Apellidos" />
+        </div>
+        <div class="field">
+            <label class="form-label fw-bolder">Correo Electronico</label>
+            <input asp-for="Correo" autocomplete="off" class="form-control" type="email" value="@Model.Correo" maxlength="50" placeholder="ejemplo@gmail.com" />
         </div>
 
         <div class="field">
             <label class="label" for="phone">Teléfono</label>
-            <input class="form-control" id="phone" name="phone" type="tel" maxlength="20" placeholder="+34 600 000 000" />
+            <input class="form-control" id="phone" name="phone" value="@Model.Telefono" type="tel" maxlength="20" placeholder="+34 600 000 000" />
         </div>
 
         <div class="field">
             <label class="label">Área</label>
-            <div class="muted small" id="areaDisplay">Desarrollo de Producto</div>
+            <div class="muted small" id="areaDisplay">@(Model.Area ?? "Sin área asignada")</div>
         </div>
 
         <details class="panel" open>
@@ -48,7 +53,7 @@
             <div class="panel-inner">
                 <div class="field">
                     <label class="form-label" >Contraseña actual</label>
-                    <input class="form-control" autocomplete="off" type="password" placeholder="Mínimo 8 caracteres" />
+                    <input class="form-control" asp-for="Contrasena" autocomplete="new-password" type="password" placeholder="Mínimo 8 caracteres" />
                 </div>
                 <div class="field">
                     <label class="label" for="newPass">Nueva contraseña</label>
@@ -71,7 +76,6 @@
             <p id="liveEmail" class="muted">correo@ejemplo.com</p>
             <p class="muted small">Área: <span id="liveArea">Desarrollo de Producto</span></p>
             <p class="muted small">Tel: <span id="livePhone">—</span></p>
-
         </div>
     </aside>
 </section>
