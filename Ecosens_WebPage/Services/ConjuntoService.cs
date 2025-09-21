@@ -61,7 +61,7 @@ namespace Ecosens_WebPage.Services
 
         public async Task<ConjuntoConContenedoresDto> ObtenerConjuntoPorId(int id, string token)
         {
-            var url = $"{_apiBaseUrl}/api/Conjuntos/{id}/conjunto-con-contenedores";
+            var url = $"{_apiBaseUrl}/api/Conjuntos/conjunto-con-contenedores/{id}";
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var content = new StringContent(JsonSerializer.Serialize(id), Encoding.UTF8, "application/json");
             var response = await httpClient.PostAsync(url, content);

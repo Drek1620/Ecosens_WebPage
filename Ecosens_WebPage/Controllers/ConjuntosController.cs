@@ -64,15 +64,15 @@ namespace Ecosens_WebPage.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Editar(int id)
+        public async Task<IActionResult> Editar(int id, string area, int areaid)
         {
             var model = await conjuntoService.ObtenerConjuntoPorId(id, _token);
 
             if (model == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = areaid});
             }
-
+            model.Area = area;
             return PartialView("_FormularioEditarConjuntoPartial", model);
         }
     }

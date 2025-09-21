@@ -40,7 +40,7 @@
             <div class="card shadow h-100">
                 <div class="card-body position-relative">
                     <div class="btn-group position-absolute top-0 end-0 m-2">
-                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" data-id="@item.Id">✎</button>
+                        <button class="edit-btn btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" data-id="@item.Id" data-area="@Model.Area" data-areaid="@Model.AreaId">✎</button>
                         <button class="btn btn-sm btn-danger">✕</button>
                     </div>
                     <h5 class="card-title border-bottom pb-2 text-primary">Sistema @item.Id</h5>
@@ -87,22 +87,22 @@
 </div>
 
 <!-- Modal de edición (contenido se carga dinámicamente) -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalTitle" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content" id="editModalContent">
             <partial name="_FormularioEditarConjuntoPartial" model="new ConjuntoConContenedoresDto()" />
         </div>
     </div>
 </div>
 
-@* @section Scripts {
+@section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', async () => {
                 const id = button.getAttribute('data-id');
                 const area = button.getAttribute('data-area');
-                const response = await fetch(`/Areas/Editar/${id}?areaId=${area}`);
+                const response = await fetch(`/Conjuntos/Editar/${id}?area=${area}`);
                 const html = await response.text();
                 document.getElementById('editModalContent').innerHTML = html;
             });
@@ -118,4 +118,4 @@
         });
     </script>
 
-} *@
+}
