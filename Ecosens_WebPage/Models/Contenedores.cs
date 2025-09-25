@@ -5,12 +5,18 @@ namespace Ecosens_WebPage.Models
 {
     public class Contenedores
     {
+        [JsonPropertyName("id")]
         public int Id { get; set; }
         [Required]
+        [JsonPropertyName("Dimensiones")]
         public decimal Dimensiones { get; set; }
+        [JsonPropertyName("peso_Total")]
         public decimal Peso_Total { get; set; }
+        [JsonPropertyName("estado")]
         public string Estado { get; set; } = "Vacio";
+        [JsonPropertyName("tipocont_Id")]
         public int Tipocont_Id { get; set; }
+        [JsonPropertyName("conjunto_Id")]
         public int Conjunto_Id { get; set; }
     }
 

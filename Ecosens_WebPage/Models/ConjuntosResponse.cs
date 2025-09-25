@@ -14,11 +14,17 @@ namespace Ecosens_WebPage.Models
 
     public class ConjuntoConContenedoresDto
     {
+        [JsonPropertyName("id")]
         public int Id { get; set; }
+        [JsonPropertyName("mac_ESP32")]
         public string Mac_ESP32 { get; set; }
+        [JsonPropertyName("clavesecreta")]
         public string Clavesecreta { get; set; }
+        [JsonPropertyName("area_Id")]
         public int Area_Id { get; set; }
+        [JsonPropertyName("area")]
         public string Area { get; set; }
+        [JsonPropertyName("contenedores")]
         public List<Contenedores> Contenedores { get; set; }
     }
 
