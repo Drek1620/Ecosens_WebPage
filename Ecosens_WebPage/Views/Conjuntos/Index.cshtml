@@ -102,7 +102,8 @@
             button.addEventListener('click', async () => {
                 const id = button.getAttribute('data-id');
                 const area = button.getAttribute('data-area');
-                const response = await fetch(`/Conjuntos/Editar/${id}?area=${area}`);
+                const areaid = button.getAttribute('data-areaid');
+                const response = await fetch(`/Conjuntos/Editar/${id}?area=${area}&areaid=${areaid}`);
                 const html = await response.text();
                 document.getElementById('editModalContent').innerHTML = html;
             });
